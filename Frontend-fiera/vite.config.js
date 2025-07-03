@@ -1,10 +1,16 @@
+/* eslint-disable no-undef */
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import dotenv from 'dotenv'
+
+// Carga las variables de entorno
+dotenv.config()
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // Permite acceso externo
-    allowedHosts: ['bjfv5l-ip-186-86-52-214.tunnelmole.net'] // Cambia esto si el dominio cambia
+    host: true,
+    allowedHosts: [process.env.VITE_HOST_TUNNEL]
+
   }
 })
