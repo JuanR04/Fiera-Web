@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true, // Permite acceso externo
-    allowedHosts: ['ghhmdv-ip-186-86-52-214.tunnelmole.net'] // Cambia esto si el dominio cambia
+    allowedHosts: ['bjfv5l-ip-186-86-52-214.tunnelmole.net'] // Cambia esto si el dominio cambia
   }
 })

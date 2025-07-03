@@ -14,7 +14,7 @@ const Header = () => {
     return (
         <div className="nav__bar">
             <div className="logo__container">
-                <img src="./logo_fiera.png" alt="logo" />
+                <NavLink to="/"><img src="./logo_fiera.png" alt="logo" /></NavLink>
             </div>
 
             <div className="search__bar">

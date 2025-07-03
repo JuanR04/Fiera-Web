@@ -17,9 +17,9 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="contact_footer">
-                    <p> <FaLocationDot style={{ fontSize: "15px", color: "#fff9" }} /> Cra 11d #33f-20B/municipal cali</p>
-                    <p><FaPhone style={{ fontSize: "15px", color: "#fff9" }} /> +57 313 793 5525 </p>
-                    <a href="mailto:fiera.colombia2025@gmail.com"> <CiMail style={{ fontSize: "15px", color: "#fff" }} /> fiera.colombia2025@gmail.com</a>
+                    <p> <FaLocationDot style={{ fontSize: "15px", color: "#fff9",marginRight: "20px"  }} /> Cra 11d #33f-20B/municipal cali</p>
+                    <p><FaPhone style={{ fontSize: "15px", color: "#fff9",marginRight: "20px"  }} /> +57 313 793 5525 </p>
+                    <a href="mailto:fiera.colombia2025@gmail.com"> <CiMail style={{ fontSize: "15px", color: "#fff", marginRight: "20px" }} /> fiera.colombia2025@gmail.com</a>
                 </div>
                 <div className="interests_footer">
                     <h2>Puntos de interés</h2>

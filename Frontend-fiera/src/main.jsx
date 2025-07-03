@@ -6,10 +6,10 @@ import Layout from './layout/layout';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
+  <Layout >
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-      </Route>
+      <Route index path="/" element={<Home />}/>
     </Routes>
+    </Layout>
   </BrowserRouter>
 );

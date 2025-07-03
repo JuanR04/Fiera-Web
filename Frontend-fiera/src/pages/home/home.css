@@ -1,0 +1,24 @@
+.__presentation_container{
+    background-color: transparent;
+    width: 100vw;
+    height: auto;
+    box-shadow: 0 10px 20px 1px #0003;
+}
+.title__presentation{
+    font-family: sans-serif;
+    font-size: 40px;
+    
+}
+
+.main_container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0 20px 0;
+}
+@media (min-width: 768px) {
+    .__presentation_container {
+        max-height: 300px;
+        overflow: hidden;
+    }
+}
