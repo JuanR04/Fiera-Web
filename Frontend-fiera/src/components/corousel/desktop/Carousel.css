@@ -1,0 +1,53 @@
+.carouselD__container {
+    width: 100%;
+    height: fit-content; /* o 500px, lo que desees */
+    position: relative;
+    
+}
+
+.slideD_image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.slideD_image::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0002;
+    z-index: 100;
+}
+
+.slideD_image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/* Swiper pagination para desktop */
+.carouselD__container .swiper-pagination {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 200;
+    bottom: 10px; /* <-- Añade esto */
+}
+
+/* Estilo base de los bullets */
+.carouselD__container .swiper-pagination-bullet {
+    background: rgba(0, 0, 0, 0.7);
+    width: 8px;
+    height: 8px;
+    margin: 0 6px;
+    border-radius: 50%;
+    opacity: 1;
+}
+
+/* Estilo del bullet activo */
+.carouselD__container .swiper-pagination-bullet-active {
+    background: #000;
+}
+

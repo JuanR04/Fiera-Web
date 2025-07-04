@@ -1,24 +1,173 @@
-.__presentation_container{
-    background-color: transparent;
+.__presentation_container {
+    position: relative;
+    margin: 0;
+    background-image: url(/images/fondo_negro.png);
+    background-size: cover;
     width: 100vw;
-    height: auto;
+    height: 400px;
     box-shadow: 0 10px 20px 1px #0003;
 }
-.title__presentation{
-    font-family: sans-serif;
-    font-size: 40px;
+
+.__presentation_container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0009;
+    z-index: 200;
+}
+
+.imagen__presentacion img {
+    position: relative;
+    right: 20px;
+    z-index: 100;
+    width: 100%;
+    height: auto;
     
 }
 
-.main_container{
+.__presentation_container h2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    bottom: -20px;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: #fff;
+    font-size: 3rem;
+    z-index: 300;
+    width: 80%;
+    /* ancho relativo */
+    text-align: center;
+    /* centra el texto dentro del h2 */
+}
+
+.__view_balls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: auto;
+    background-image: url(/images/fondo_cesped.png);
+    box-shadow: 0 10px 40px 0 #0007;
+}
+
+.__view_balls::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0009;
+    z-index: 200;
+}
+
+.__view_balls img {
+    position: relative;
+    z-index: 300;
+    margin-top: 20px;
+    width: 400px;
+    margin: 0;
+    object-fit: cover;
+    filter: drop-shadow(0 20px 40px #000c);
+
+}
+
+.__view_balls h2 {
+    position: relative;
+    font-family: "Fjalla One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2.5rem;
+    color: #fff;
+    z-index: 200;
+    margin: 0;
+
+}
+
+.__view_balls h3 {
+    position: relative;
+    font-family: sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1rem;
+    color: #ccc;
+    z-index: 200;
+    margin: 0;
+}
+
+.btn_verbalones {
+    position: relative;
+    z-index: 200;
+    background-color: #fff;
+    padding: 20px 40px;
+    margin: 20px 0 20px 0;
+    border-radius: 30px;
+    text-decoration: none;
+    color: #000;
+
+}
+
+.btn_verbalones:hover {
+    background-color: #ccc;
+}
+
+.title_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.title_info h2 {
+    font-family: "Fjalla One", sans-serif;
+    font-size: 3rem;
+    font-weight: 600;
+    margin: 20px 0 0 0;
+    letter-spacing: 0.2px;
+    font-style: normal;
+    padding: 10px;
+}
+
+.title_info h3 {
+    font-family: sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    width: 200px;
+    color: #fff;
+    background-color: #000;
+    letter-spacing: 0.2px;
+    font-style: normal;
+    padding: 10px;
+}
+
+.main_container {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin: 20px 0 20px 0;
 }
+.__publicite_container{
+    position: relative;
+    background-color: transparent;
+    background-size: cover;
+    width: 100vw;
+    height: 400px;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 20px 1px #0003;
+}
 @media (min-width: 768px) {
-    .__presentation_container {
-        max-height: 300px;
-        overflow: hidden;
+
+    .title__presentation {
+        font-family: "Libertinus Mono", monospace;
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: 5px;
+        font-style: normal;
     }
 }

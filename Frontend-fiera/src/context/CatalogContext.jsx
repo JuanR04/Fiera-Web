@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useSearchParams } from "react-router-dom";
 
 const CatalogContext = createContext();
 
@@ -16,8 +17,9 @@ export const CatalogProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     category: '',
     subcategory: '',
-    ageGroup: '' // 'adulto' o 'niño'
+    ageGroup: '' 
   });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Simulación de API - aquí irá tu lógica real de base de datos
   const mockProducts = [
@@ -60,30 +62,37 @@ export const CatalogProvider = ({ children }) => {
     }
   };
 
-  // Función para aplicar filtros
+  // Al cargar, lee los filtros de la URL
+  useEffect(() => {
+    const category = searchParams.get("category") || "";
+    const subcategory = searchParams.get("subcategory") || "";
+    const ageGroup = searchParams.get("ageGroup") || "";
+    const urlFilters = { category, subcategory, ageGroup };
+    setFilters(urlFilters);
+    fetchProducts(urlFilters);
+    // eslint-disable-next-line
+  }, [searchParams]); 
+
   const applyFilter = (filterType, value) => {
     const newFilters = { ...filters, [filterType]: value };
-    
-    // Si se cambia categoria, limpiar subcategoria
-    if (filterType === 'category') {
-      newFilters.subcategory = '';
-    }
-    
+    if (filterType === "category") newFilters.subcategory = "";
+
     setFilters(newFilters);
+    setSearchParams(
+      Object.fromEntries(
+        Object.entries(newFilters).filter(([_, v]) => v) // Solo filtros activos
+      )
+    );
     fetchProducts(newFilters);
   };
 
-  // Función para limpiar filtros
+  // Modifica clearFilters para limpiar la URL
   const clearFilters = () => {
-    const clearedFilters = { category: '', subcategory: '', ageGroup: '' };
+    const clearedFilters = { category: "", subcategory: "", ageGroup: "" };
     setFilters(clearedFilters);
+    setSearchParams({});
     fetchProducts(clearedFilters);
   };
-
-  // Cargar productos iniciales
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   return (
     <CatalogContext.Provider value={{

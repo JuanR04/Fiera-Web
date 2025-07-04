@@ -6,19 +6,14 @@
 
 /* Banner principal */
 .catalog-banner {
-  background-color: #000;
-  color: white;
-  text-align: center;
-  padding: 2rem 1rem;
-  margin-bottom: 1rem;
-  position: relative;
-  display: flex;
-  margin-top: 20px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
+  height: fit-content;
+  margin: 20px 0 20px 0;
+  background-color: transparent;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.12);
+
 }
+
+
 
 /* Imagen del guayo */
 .banner-logo {
@@ -27,7 +22,7 @@
   object-fit: contain;
   filter: brightness(1.1) contrast(1.1);
   transition: transform 0.3s ease;
-  margin-bottom: -100px; 
+  margin-bottom: -100px;
 }
 
 .banner-logo:hover {
@@ -321,11 +316,6 @@
 
 /* === TABLET (768px+) === */
 @media (min-width: 768px) {
-  .catalog-banner {
-    padding: 3rem 2rem;
-    flex-direction: row;
-    gap: 2rem;
-  }
 
   .banner-logo {
     max-width: 250px;
@@ -364,11 +354,6 @@
 
 /* === DESKTOP (1024px+) === */
 @media (min-width: 1024px) {
-  .catalog-banner {
-    padding: 3rem 2rem;
-    gap: 3rem;
-  }
-
   .banner-logo {
     max-width: 350px;
   }
@@ -390,13 +375,10 @@
 
 /* === DESKTOP LARGE (1440px+) === */
 @media (min-width: 1440px) {
-  .catalog-banner {
-    padding: 1rem 2rem;
-  }
 
   .banner-logo {
     max-width: 450px;
-    
+
   }
 
   .catalog-banner h1 {

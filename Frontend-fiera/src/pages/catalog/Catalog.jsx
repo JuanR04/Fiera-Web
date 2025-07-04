@@ -4,6 +4,7 @@ import { FaFilter, FaTimes, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useCatalog } from '../../context/CatalogContext';
 import ProductGrid from '../../components/ProductGrid/ProductGrid';
 import ProductModal from '../../components/ProductModal/ProductModal';
+import CarouselD from '../../components/corousel/desktop/Carousel';
 
 const Catalog = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para manejar la visibilidad de los filtros
@@ -77,8 +78,7 @@ const Catalog = () => {
     <div className="catalog-container">
       {/* Banner principal */}
       <header className="catalog-banner">
-        <img src="/guayo-negro.png" alt="Fiera Logo" className="banner-logo" />
-        <h1>JUEGA COMO LOS CAMPEONES</h1>
+        <CarouselD/>
       </header>
 
       {/* Filtros móviles */}
