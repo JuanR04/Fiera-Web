@@ -22,7 +22,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                     <div className="modal-image-section">
                         <div className="modal-image-container">
                             <img 
-                                src={product.image} 
+                                src={product.url_image} 
                                 alt={product.name}
                                 className="modal-product-image"
                             />
