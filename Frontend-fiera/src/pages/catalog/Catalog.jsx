@@ -219,7 +219,7 @@ const Catalog = () => {
 
           {/* Grid de productos */}
           <ProductGrid
-            columns={{ mobile: 3, tablet: 3, desktop: 5 }}
+            columns={{ mobile: 2, tablet: 3, desktop: 5 }}
             onProductClick={handleProductClick}
             showPromotion={true}
             promotionAfter={6}
