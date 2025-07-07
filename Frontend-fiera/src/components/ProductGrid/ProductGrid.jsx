@@ -42,7 +42,7 @@ const ProductGrid = ({ // Configuración de la grilla
                     >
                         <div className="product-image-container">
                             <img 
-                                src={product.image} 
+                                src={product.url_image} 
                                 alt={product.name}
                                 className="product-image"
                             />

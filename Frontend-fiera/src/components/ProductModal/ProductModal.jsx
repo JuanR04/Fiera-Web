@@ -11,23 +11,23 @@ const ProductModal = ({ product, isOpen, onClose }) => {
     };
 
     return (
-      <div className="product-modal-overlay" onClick={handleOverlayClick}>
-        <div className="product-modal">
-          <button className="modal-close-btn" onClick={onClose}>
-            <FaTimes />
-          </button>
-
-          <div className="modal-content">
-            {/* Imagen del producto */}
-            <div className="modal-image-section">
-              <div className="modal-image-container">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="modal-product-image"
-                />
-              </div>
-            </div>
+        <div className="product-modal-overlay" onClick={handleOverlayClick}>
+            <div className="product-modal">
+                <button className="modal-close-btn" onClick={onClose}>
+                    <FaTimes />
+                </button>
+                
+                <div className="modal-content">
+                    {/* Imagen del producto */}
+                    <div className="modal-image-section">
+                        <div className="modal-image-container">
+                            <img 
+                                src={product.url_image} 
+                                alt={product.name}
+                                className="modal-product-image"
+                            />
+                        </div>
+                    </div>
 
             {/* Información del producto */}
             <div className="modal-info-section">
