@@ -11,23 +11,23 @@ const ProductModal = ({ product, isOpen, onClose }) => {
     };
 
     return (
-        <div className="product-modal-overlay" onClick={handleOverlayClick}>
-            <div className="product-modal">
-                <button className="modal-close-btn" onClick={onClose}>
-                    <FaTimes />
-                </button>
-                
-                <div className="modal-content">
-                    {/* Imagen del producto */}
-                    <div className="modal-image-section">
-                        <div className="modal-image-container">
-                            <img 
-                                src={product.url_image} 
-                                alt={product.name}
-                                className="modal-product-image"
-                            />
-                        </div>
-                    </div>
+      <div className="product-modal-overlay" onClick={handleOverlayClick}>
+        <div className="product-modal">
+          <button className="modal-close-btn" onClick={onClose}>
+            <FaTimes />
+          </button>
+
+          <div className="modal-content">
+            {/* Imagen del producto */}
+            <div className="modal-image-section">
+              <div className="modal-image-container">
+                <img
+                  src={product.url_image}
+                  alt={product.name}
+                  className="modal-product-image"
+                />
+              </div>
+            </div>
 
             {/* Información del producto */}
             <div className="modal-info-section">
@@ -55,6 +55,9 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                 </div>
                 <div className="detail-item">
                   <strong>Num Referencia:</strong> {product.num_referencia}
+                </div>
+                <div className="detail-item">
+                  <strong>Sub-Categoría:</strong> {product.subcategory}
                 </div>
                 <div className="detail-item">
                   <strong>Talla:</strong> {product.size}
