@@ -15,7 +15,7 @@
 .product-modal {
     background: white;
     border-radius: 12px;
-    max-width: 800px;
+    max-width: 900px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -64,12 +64,14 @@
     overflow: hidden;
     border-radius: 8px;
     background-color: #f5f5f5;
+    
 }
 
 .modal-product-image {
     width: 90%;
     height: 90%;
     object-fit: contain;
+    filter: drop-shadow(-10px 80px 9px #0002);
 }
 
 .modal-info-section {

@@ -11,15 +11,16 @@ const FormAdmin = () => {
         name: '',
         subcategory: '',
         type: '',
-        size: '',
+        size_min: '',
+        size_max: '',
         material: '',
         colors: ['#000000'],
-        url_image: '',
-
+        
     });
 
     // Estado para la imagen de vista previa
     const [imagePreview, setImagePreview] = useState(null);
+    const [imageFile, setImageFile] = useState(null); // Nuevo estado para el archivo
 
     // Estado para mensajes de error/éxito
     const [message, setMessage] = useState({ text: '', type: '' });
@@ -148,19 +149,14 @@ const FormAdmin = () => {
     const handleFileChange = e => {
         const file = e.target.files[0];
         if (file) {
-            // Crear URL para vista previa
+            // Vista previa
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result);
             };
             reader.readAsDataURL(file);
 
-            // En un escenario real, aquí se cargaría a Cloudinary o similar
-            // Por ahora simulamos con una URL temporal
-            setFormData(prev => ({
-                ...prev,
-                url_image: URL.createObjectURL(file),
-            }));
+            setImageFile(file); // Guarda el archivo real aquí
 
             // Limpiar error
             if (errors.url_image) {
@@ -210,7 +206,8 @@ const FormAdmin = () => {
             'name',
             'subcategory',
             'type',
-            'size',
+            'size_min',
+            'size_max'
 
         ];
 
@@ -263,11 +260,10 @@ const FormAdmin = () => {
             name: '',
             subcategory: '',
             type: '',
-            size: '',
+            size_min: '',
+            size_max: '',
             material: '',
             colors: ['#000000'],
-            url_image: '',
-
         });
         setImagePreview(null);
         setErrors({});
@@ -287,18 +283,23 @@ const FormAdmin = () => {
             try {
                 setMessage({ text: 'Enviando datos...', type: 'info' });
 
-                // Preparar datos según la categoría
-                const productData = { ...formData };
+                // Usa FormData para enviar todo, incluyendo el archivo
+                const data = new FormData();
+                Object.entries(formData).forEach(([key, value]) => {
+                    // Si el campo es colors (array), lo conviertes a string
+                    if (key === 'colors' && Array.isArray(value)) {
+                        data.append(key, value.join(','));
+                    } else if (key !== 'url_image') { // No envíes url_image
+                        data.append(key, value);
+                    }
+                });
+                if (imageFile) data.append('image', imageFile); // Aquí va el archivo
 
-                // Simular envío al backend
                 const response = await fetch(
-                    `${import.meta.env.VITE_API_URL}/api/product`,
+                    `${import.meta.env.VITE_API_URL}/api/registerproduct`,
                     {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(productData),
+                        body: data,
                     }
                 );
 
@@ -307,7 +308,7 @@ const FormAdmin = () => {
                         text: '¡Producto registrado con éxito!',
                         type: 'success',
                     });
-                    handleReset(); // Limpiar formulario tras éxito
+                    handleReset();
                 } else {
                     const error = await response.json();
                     throw new Error(error.message || 'Error al registrar el producto');
@@ -520,26 +521,49 @@ const FormAdmin = () => {
                         )}
 
                         {/* Talla */}
-                        <div className="form-group">
-                            <label htmlFor="size">Talla*</label>
-                            <select
-                                id="size"
-                                name="size"
-                                value={formData.size}
-                                onChange={handleChange}
-                                disabled={!formData.category}
-                                className={errors.size ? 'error' : ''}
-                            >
-                                <option value="">Seleccionar talla</option>
-                                {availableSizes.map(size => (
-                                    <option key={size} value={size}>
-                                        {size}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.size && (
-                                <span className="error-message">{errors.size}</span>
-                            )}
+                        <div className='size_group'>
+                            <div className="form-group _smin">
+                                <label htmlFor="size">Talla mínima</label>
+                                <select
+                                    id="size_min"
+                                    name="size_min"
+                                    value={formData.size_min}
+                                    onChange={handleChange}
+                                    disabled={!formData.category}
+                                    className={errors.size ? 'error' : ''}
+                                >
+                                    <option value="">Seleccionar talla</option>
+                                    {availableSizes.map(size => (
+                                        <option key={size} value={size}>
+                                            {size}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.size && (
+                                    <span className="error-message">{errors.size}</span>
+                                )}
+                            </div>
+                            <div className="form-group _smax">
+                                <label htmlFor="size">Talla máxima</label>
+                                <select
+                                    id="size_max"
+                                    name="size_max"
+                                    value={formData.size_max}
+                                    onChange={handleChange}
+                                    disabled={!formData.category}
+                                    className={errors.size ? 'error' : ''}
+                                >
+                                    <option value="">Seleccionar talla</option>
+                                    {availableSizes.map(size => (
+                                        <option key={size} value={size}>
+                                            {size}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.size && (
+                                    <span className="error-message">{errors.size}</span>
+                                )}
+                            </div>
                         </div>
 
                         {/* Colores */}

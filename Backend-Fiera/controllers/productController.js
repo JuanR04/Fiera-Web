@@ -19,7 +19,7 @@ export const registerProduct =[
     upload.single('image'), 
     async(req, res) =>{
         console.log(req.body);
-        const {num_referencia,category,description,name,subcategory,type,size,color} = req.body;
+        const {num_referencia,category,description,name,subcategory,type,size_min,size_max,material,colors} = req.body;
 
         if (
             !num_referencia ||
@@ -27,8 +27,10 @@ export const registerProduct =[
             !name ||
             !subcategory ||
             !type ||
-            !size ||
-            !color
+            !size_min ||
+            !size_max ||
+            !material||
+            !colors
         ) {
             return res.status(400).json({ message: "Todos los campos son obligatorios excepto la descripción." });
         }
@@ -37,7 +39,7 @@ export const registerProduct =[
             const result = await cloudinary.uploader.upload(req.file.path);
             const url_image = result.secure_url;
             const product = await CreateProducts(num_referencia,category,url_image,description);
-            const details = await createDetailsProduct(product.id_producto,name,subcategory,type,size,color);
+            const details = await createDetailsProduct(product.id_producto,name,subcategory,type,colors,size_min,size_max,material);
             res.status(201).json({message: "Producto registrado correctamente", product, details});
             
         }catch(error){

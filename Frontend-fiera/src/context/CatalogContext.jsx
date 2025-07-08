@@ -24,7 +24,7 @@ export const CatalogProvider = ({ children }) => {
 
   // Simulación de API - aquí irá tu lógica real de base de datos
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/product`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/getproduct`)
       .then(res => res.json())
       .then(data => {
         console.log("Datos del backend",data);

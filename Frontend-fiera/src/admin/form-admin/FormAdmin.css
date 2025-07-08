@@ -77,6 +77,18 @@
 }
 
 /* Grupos de campos */
+.size_group{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+._smin, ._smax{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
 .form-group {
   display: flex;
   flex-direction: column;
@@ -93,7 +105,7 @@
 .form-group select,
 .form-group textarea {
   padding: 0.75rem;
-  border: 2px solid #ddd;
+  border: 2px solid #fdfdfd;
   border-radius: 5px;
   font-size: 1rem;
   width: 100%;
