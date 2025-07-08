@@ -5,6 +5,7 @@ import { CatalogProvider } from './context/CatalogContext';
 import Home from './pages/home/home';
 import Layout from './layout/layout';
 import Catalog from './pages/catalog/Catalog';
+import FormAdmin from './admin/form-admin/FormAdmin';
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <CatalogProvider>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="catalogo" element={<Catalog />} />
+          <Route path="/admin" element={<FormAdmin />} />
         </Route>
       </Routes>
     </CatalogProvider>
