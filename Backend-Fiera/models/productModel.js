@@ -11,3 +11,33 @@ export const findProducts = async() =>{
         const result = await pool.query(query);
         return result.rows;
 };
+//Funcion para encontrar un producto especifico mediante su id
+export const findProductById = async(id_producto)=>{
+  const query =
+    'SELECT * FROM producto p INNER JOIN detalle_producto d ON p.id_producto = d.id_producto WHERE p.id_producto = $1';
+  const result = await pool.query(query, [id_producto]);
+  return result.rows[0]; // Devuelve el producto o undefined si no existe
+};
+
+
+// Funcion para eliminar un producto
+export const deleteProducts = async(id_producto) =>{
+        // debido a la restriccion de clave foranea, primero se deben eliminar los detalles del producto
+        const queryDetail = "DELETE FROM detalle_producto WHERE id_producto = $1";
+        await pool.query(queryDetail,[id_producto]); 
+
+        //Eliminamos el producto
+        const query = "DELETE FROM producto WHERE id_producto = $1 RETURNING *";
+        const result = await pool.query(query,[id_producto])
+        return result.rows[0]; // Retorna el producto eliminado
+} 
+
+
+
+
+
+
+
+
+
+

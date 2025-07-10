@@ -1,4 +1,4 @@
-import {findProducts, CreateProducts} from "../models/productModel.js";
+import {findProducts, CreateProducts, findProductById, deleteProducts} from "../models/productModel.js";
 import { createDetailsProduct } from "../models/productDetailModel.js";
 import cloudinary from "../config/cloudinaryConfig.js";
 import multer from 'multer'; 
@@ -47,3 +47,48 @@ export const registerProduct =[
         }
     }
 ]
+// Controlador para obtener un producto por ID
+export const getProductById = async(req, res) => {
+    try {
+        const { id } = req.params;// obtener el id del producto desde los parametros de la URL.
+        const product = await findProductById(id);// buscar el producto por su ID en la base de datos.
+        
+        if (!product) { // Si el producto no existe, se retorna un error  
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+        
+        res.status(200).json(product);
+    } catch (error) {
+        console.error("Error al obtener producto:", error);
+        res.status(500).json({
+            message: "Error en el servidor al obtener el producto",
+            error: error.message
+        });
+    }
+};
+// Controlador para la eliminacion  de productos:
+export const deleteProductById = async(req,res)=>{
+    try{
+        const {id} = req.params; // Aqui se obtiene el id de los parametros de la URL, la cual es enviada desde el cliente.
+
+        // verficar si el producto existe:
+        const product = await findProductById(id);
+        if(!product){
+            return res.status(404).json({message: "No se encontró el producto"});
+        }
+        // Si hay una imagen en cloudinary eliminarla:
+        if(product.url_image){
+            // Se extrae el public_id de la URL de la imagen para eliminarla de Cloudinary.
+            const publicId = product.url_image.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(publicId);
+        }
+        // Eliminar el producto:
+        const deleteProduct = await deleteProducts(id);
+
+        // status 200 indica que la solicitud se ha procesado correctamente.
+        res.status(200).json({message: "Producto eliminado correctamente", product: deleteProduct});// Se envia el producto eliminado como respuesta.
+
+    }catch(error){
+        res.status(500).json({message: "Error en el servidor", error: error.message});
+    }
+}
