@@ -33,9 +33,9 @@ const ProductGrid = ({ // Configuración de la grilla
             '--tablet-columns': columns.tablet,
             '--desktop-columns': columns.desktop
         }}>
-            {products.map((product) => ( // Iterar sobre productos
+            {products.map((product,index) => ( // Iterar sobre productos
                 // Renderizar cada producto
-                <div key={product.id}>
+                <div key={index}>
                     <div 
                         className="product-card"
                         onClick={() => onProductClick && onProductClick(product)}

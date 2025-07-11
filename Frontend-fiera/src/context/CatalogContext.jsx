@@ -22,7 +22,7 @@ export const CatalogProvider = ({ children }) => {
   });
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Simulación de API - aquí irá tu lógica real de base de datos
+  
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/getproduct`)
       .then(res => res.json())
