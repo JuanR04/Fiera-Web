@@ -4,7 +4,6 @@ import PanelProducts from "./panel_products/panel_products";
 const DashboardAdmin = () =>{
     return(
         <>
-            <FormAdmin/>
             <PanelProducts/>
         </>
     )

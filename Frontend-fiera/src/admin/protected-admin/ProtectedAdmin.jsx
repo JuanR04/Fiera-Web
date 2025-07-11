@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import FormAdmin from '../form-admin/FormAdmin';
+import DashboardAdmin from '../dashboard_admin';
 import './ProtectedAdmin.css';
 
 const ProtectedAdmin = () => {

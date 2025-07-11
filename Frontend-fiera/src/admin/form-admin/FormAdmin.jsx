@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import './FormAdmin.css';
+import DashboardAdmin from '../dashboard_admin';
 import {
     FaUpload,
     FaTrash,
@@ -637,6 +638,7 @@ const FormAdmin = ({ onLogout }) => {
                     </button>
                 </div>
             </form>
+            <DashboardAdmin />
         </div>
     );
 };

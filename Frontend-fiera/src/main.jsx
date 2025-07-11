@@ -16,7 +16,6 @@ createRoot(document.getElementById('root')).render(
           <Route index element={<Home />} />
           <Route path="catalogo" element={<Catalog />} />
           <Route path="/admin" element={<ProtectedAdmin />} />
-          <Route path="/admin" element={<DashboardAdmin />} />
         </Route>
       </Routes>
     </CatalogProvider>
