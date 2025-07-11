@@ -11,3 +11,10 @@ export const findProducts = async() =>{
         const result = await pool.query(query);
         return result.rows;
 };
+
+export const UpdateProductsId = async(id_producto,num_referencia,category,url_image,description)=>{
+        const query = "UPDATE producto SET num_referencia=$2,category=$3,url_image=$4,description=$5 WHERE id_producto=$1";
+        const values = [id_producto,num_referencia,category,url_image,description];
+        const result = await pool.query(query,values);
+        return result.rows[0]
+};
