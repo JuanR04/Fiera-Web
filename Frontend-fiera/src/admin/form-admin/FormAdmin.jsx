@@ -1,8 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import './FormAdmin.css';
-import { FaUpload, FaTrash, FaSave, FaPlus, FaTimes } from 'react-icons/fa';
+import {
+    FaUpload,
+    FaTrash,
+    FaSave,
+    FaPlus,
+    FaTimes,
+    FaSignOutAlt,
+} from 'react-icons/fa';
 
-const FormAdmin = () => {
+const FormAdmin = ({ onLogout }) => {
     // Estado para los valores del formulario
     const [formData, setFormData] = useState({
         num_referencia: '',
@@ -15,7 +22,6 @@ const FormAdmin = () => {
         size_max: '',
         material: '',
         colors: ['#000000'],
-        
     });
 
     // Estado para la imagen de vista previa
@@ -60,7 +66,14 @@ const FormAdmin = () => {
     const getTypeOptions = (category, subcategory) => {
         if (category === 'Guayos') {
             if (subcategory === 'Amateur') {
-                return ['Zapatilla Futbol Sala FS', 'Botin Zapatilla Futbol Sala', 'Zapatilla Gama Sintetica', 'Botin Zapatilla Gama Sintetica', 'Botin Guayo', 'Guayo'];
+                return [
+                    'Zapatilla Futbol Sala FS',
+                    'Botin Zapatilla Futbol Sala',
+                    'Zapatilla Gama Sintetica',
+                    'Botin Zapatilla Gama Sintetica',
+                    'Botin Guayo',
+                    'Guayo',
+                ];
             } else if (subcategory === 'Profesional') {
                 return ['Botin Guayo', 'Guayo'];
             }
@@ -207,8 +220,7 @@ const FormAdmin = () => {
             'subcategory',
             'type',
             'size_min',
-            'size_max'
-
+            'size_max',
         ];
 
         requiredFields.forEach(field => {
@@ -246,7 +258,6 @@ const FormAdmin = () => {
             material: 'Material',
             colors: 'Colores',
             url_image: 'Imagen',
-
         };
         return labels[field] || field;
     };
@@ -289,7 +300,8 @@ const FormAdmin = () => {
                     // Si el campo es colors (array), lo conviertes a string
                     if (key === 'colors' && Array.isArray(value)) {
                         data.append(key, value.join(','));
-                    } else if (key !== 'url_image') { // No envíes url_image
+                    } else if (key !== 'url_image') {
+                        // No envíes url_image
                         data.append(key, value);
                     }
                 });
@@ -324,7 +336,6 @@ const FormAdmin = () => {
             });
         }
     };
-
     return (
         <div className="form-admin-container">
             <div className="form-admin-header">
@@ -334,6 +345,9 @@ const FormAdmin = () => {
                     className="form-admin-logo"
                 />
                 <h2>Registro de Productos</h2>
+                <button onClick={onLogout} className="logout-button" type="button">
+                    <FaSignOutAlt /> Cerrar sesión
+                </button>
             </div>
 
             {message.text && (
@@ -521,7 +535,7 @@ const FormAdmin = () => {
                         )}
 
                         {/* Talla */}
-                        <div className='size_group'>
+                        <div className="size_group">
                             <div className="form-group _smin">
                                 <label htmlFor="size">Talla mínima</label>
                                 <select

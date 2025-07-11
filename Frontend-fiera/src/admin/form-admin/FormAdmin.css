@@ -77,13 +77,13 @@
 }
 
 /* Grupos de campos */
-.size_group{
+.size_group {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-
 }
-._smin, ._smax{
+._smin,
+._smax {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -350,6 +350,43 @@
   height: auto;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón de logout */
+.form-admin-header {
+  position: relative;
+}
+
+.logout-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+/* Ajuste responsive */
+@media (max-width: 768px) {
+  .logout-button {
+    position: static;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Responsive */

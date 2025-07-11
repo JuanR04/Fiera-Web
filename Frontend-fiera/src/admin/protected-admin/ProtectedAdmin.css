@@ -1,0 +1,66 @@
+.admin-auth-container {
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.admin-auth-logo {
+  max-width: 150px;
+  margin-bottom: 1.5rem;
+}
+
+.admin-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.admin-auth-form .form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.admin-auth-form label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.admin-auth-form input {
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.admin-auth-form input:focus {
+  border-color: #000;
+  outline: none;
+}
+
+.admin-auth-form .error-message {
+  color: #e53935;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.admin-auth-form .submit-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-auth-form .submit-button:hover {
+  background-color: #333;
+}
