@@ -1,10 +1,12 @@
+// FormAdmin.jsx (actualizado con correcciones para cargar tipo al editar)
 import { useState, useRef, useEffect } from 'react';
 import './FormAdmin.css';
 import { FaUpload, FaTrash, FaSave, FaPlus, FaTimes } from 'react-icons/fa';
 
-const FormAdmin = () => {
-    // Estado para los valores del formulario
+const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo }) => {
     const [formData, setFormData] = useState({
+        id_producto: '',
+        id_detalle: '',
         num_referencia: '',
         category: '',
         description: '',
@@ -15,48 +17,24 @@ const FormAdmin = () => {
         size_max: '',
         material: '',
         colors: ['#000000'],
-        
+        ...productoEditar,
     });
 
-    // Estado para la imagen de vista previa
-    const [imagePreview, setImagePreview] = useState(null);
-    const [imageFile, setImageFile] = useState(null); // Nuevo estado para el archivo
-
-    // Estado para mensajes de error/éxito
+    const [imagePreview, setImagePreview] = useState(productoEditar?.url_image || null);
+    const [imageFile, setImageFile] = useState(null);
     const [message, setMessage] = useState({ text: '', type: '' });
-
-    // Estado para subcategorías disponibles según la categoría seleccionada
     const [availableSubcategories, setAvailableSubcategories] = useState([]);
-
-    // Estado para tipos disponibles según la categoría y subcategoría
     const [availableTypes, setAvailableTypes] = useState([]);
-
-    // Estado para tallas disponibles según la categoría
     const [availableSizes, setAvailableSizes] = useState([]);
-
-    // Estado para validación
     const [errors, setErrors] = useState({});
-
-    // Referencia al input de tipo file
     const fileInputRef = useRef(null);
 
-    // Definición de categorías y subcategorías
     const categories = [
-        {
-            name: 'Guayos',
-            subcategories: ['Amateur', 'Profesional'],
-        },
-        {
-            name: 'Balones',
-            subcategories: ['Futbol'],
-        },
-        {
-            name: 'Licras',
-            subcategories: ['Deportivas'],
-        },
+        { name: 'Guayos', subcategories: ['Amateur', 'Profesional'] },
+        { name: 'Balones', subcategories: ['Futbol'] },
+        { name: 'Licras', subcategories: ['Deportivas'] },
     ];
 
-    // Opciones para tipos según la categoría y subcategoría
     const getTypeOptions = (category, subcategory) => {
         if (category === 'Guayos') {
             if (subcategory === 'Amateur') {
@@ -72,186 +50,121 @@ const FormAdmin = () => {
         return [];
     };
 
-    // Opciones para tallas según la categoría
     const getSizeOptions = category => {
-        if (category === 'Guayos') {
-            return Array.from({ length: 14 }, (_, i) => (i + 32).toString()); // 32-45
-        } else if (category === 'Balones') {
-            return ['#3.5', '#4', '#5'];
-        } else if (category === 'Licras') {
-            return ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-        }
+        if (category === 'Guayos') return Array.from({ length: 14 }, (_, i) => (i + 32).toString());
+        if (category === 'Balones') return ['#3.5', '#4', '#5'];
+        if (category === 'Licras') return ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         return [];
     };
 
-    // Opciones para materiales (solo para guayos)
-    const materialOptions = ['cuero', 'sintético'];
+    const materialOptionsByCategory = {
+        Guayos: ['cuero', 'sintético'],
+        Balones: ['sintético'],
+        Licras: ['tela licra'],
+    };
 
-    // Actualizar subcategorías cuando cambia la categoría
     useEffect(() => {
         if (formData.category) {
             const category = categories.find(cat => cat.name === formData.category);
             setAvailableSubcategories(category ? category.subcategories : []);
 
-            // Reset subcategory if not in the new list
-            if (
-                category &&
-                category.subcategories.length > 0 &&
-                !category.subcategories.includes(formData.subcategory)
-            ) {
+            if (category && !category.subcategories.includes(formData.subcategory)) {
                 setFormData(prev => ({ ...prev, subcategory: '' }));
             }
 
-            // Update available sizes
             setAvailableSizes(getSizeOptions(formData.category));
 
-            // Reset type
-            setFormData(prev => ({ ...prev, type: '' }));
-            setAvailableTypes([]);
-        } else {
-            setAvailableSubcategories([]);
-            setAvailableSizes([]);
-            setAvailableTypes([]);
+            const types = getTypeOptions(formData.category, formData.subcategory);
+            setAvailableTypes(types);
+
+            if (!productoEditar && !types.includes(formData.type)) {
+                setFormData(prev => ({ ...prev, type: '' }));
+            }
         }
     }, [formData.category]);
 
-    // Actualizar tipos cuando cambia la subcategoría
     useEffect(() => {
         if (formData.category && formData.subcategory) {
             const types = getTypeOptions(formData.category, formData.subcategory);
             setAvailableTypes(types);
 
-            // Reset type if not in the new list
-            if (types.length > 0 && !types.includes(formData.type)) {
+            if (!types.includes(formData.type)) {
                 setFormData(prev => ({ ...prev, type: '' }));
             }
         }
     }, [formData.subcategory, formData.category]);
 
-    // Manejar cambios en los inputs
+    useEffect(() => {
+        if (productoEditar) {
+            const colorArray = typeof productoEditar.color === 'string'
+                ? productoEditar.color.split(',').map(c => c.trim())
+                : ['#000000'];
+
+            const subcats = categories.find(cat => cat.name === productoEditar.category)?.subcategories || [];
+            const sizes = getSizeOptions(productoEditar.category);
+            const types = getTypeOptions(productoEditar.category, productoEditar.subcategory);
+
+            setAvailableSubcategories(subcats);
+            setAvailableSizes(sizes);
+            setAvailableTypes(types);
+
+            setFormData(prev => ({
+                ...prev,
+                ...productoEditar,
+                id_producto: parseInt(productoEditar.id_producto),
+                id_detalle: parseInt(productoEditar.id_detalle),
+                colors: colorArray,
+            }));
+
+            setImagePreview(productoEditar.url_image || null);
+        }
+    }, [productoEditar]);
+
     const handleChange = e => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value,
-        }));
-
-        // Limpiar error del campo cuando se modifica
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: '',
-            }));
-        }
+        setFormData(prev => ({ ...prev, [name]: value }));
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
     };
 
-    // Manejar cambios en el input de archivo
     const handleFileChange = e => {
         const file = e.target.files[0];
         if (file) {
-            // Vista previa
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
+            reader.onloadend = () => setImagePreview(reader.result);
             reader.readAsDataURL(file);
-
-            setImageFile(file); // Guarda el archivo real aquí
-
-            // Limpiar error
-            if (errors.url_image) {
-                setErrors(prev => ({
-                    ...prev,
-                    url_image: '',
-                }));
-            }
+            setImageFile(file);
+            if (errors.url_image) setErrors(prev => ({ ...prev, url_image: '' }));
         }
     };
 
-    // Añadir un nuevo color
-    const addColor = () => {
-        setFormData(prev => ({
-            ...prev,
-            colors: [...prev.colors, '#FFFFFF'],
-        }));
-    };
+    const addColor = () => setFormData(prev => ({ ...prev, colors: [...prev.colors, '#FFFFFF'] }));
 
-    // Cambiar un color existente
     const changeColor = (index, value) => {
         const updatedColors = [...formData.colors];
         updatedColors[index] = value;
-        setFormData(prev => ({
-            ...prev,
-            colors: updatedColors,
-        }));
+        setFormData(prev => ({ ...prev, colors: updatedColors }));
     };
 
-    // Eliminar un color
     const removeColor = index => {
         if (formData.colors.length > 1) {
             const updatedColors = formData.colors.filter((_, i) => i !== index);
-            setFormData(prev => ({
-                ...prev,
-                colors: updatedColors,
-            }));
+            setFormData(prev => ({ ...prev, colors: updatedColors }));
         }
     };
 
-    // Validar el formulario
     const validateForm = () => {
         const newErrors = {};
-        const requiredFields = [
-            'num_referencia',
-            'category',
-            'name',
-            'subcategory',
-            'type',
-            'size_min',
-            'size_max'
-
-        ];
-
+        const requiredFields = ['num_referencia', 'category', 'name', 'subcategory', 'type', 'size_min', 'size_max'];
         requiredFields.forEach(field => {
-            if (!formData[field]) {
-                newErrors[field] = `El campo ${getFieldLabel(field)} es obligatorio`;
-            }
+            if (!formData[field]) newErrors[field] = `El campo ${field} es obligatorio`;
         });
-
-        // Validar material solo para guayos
-        if (formData.category === 'Guayos' && !formData.material) {
-            newErrors.material = 'El material es obligatorio para guayos';
-        }
-
-        if (!formData.url_image && !imagePreview) {
-            newErrors.url_image = 'La imagen es obligatoria';
-        }
-
-        if (formData.colors.length === 0) {
-            newErrors.colors = 'Debe seleccionar al menos un color';
-        }
-
+        if (formData.category === 'Guayos' && !formData.material) newErrors.material = 'Material requerido';
+        if (!formData.url_image && !imagePreview) newErrors.url_image = 'Imagen requerida';
+        if (!formData.colors.length) newErrors.colors = 'Debe seleccionar al menos un color';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    // Obtener etiqueta para mensajes de error
-    const getFieldLabel = field => {
-        const labels = {
-            num_referencia: 'Número de referencia',
-            category: 'Categoría',
-            name: 'Nombre',
-            subcategory: 'Subcategoría',
-            type: 'Tipo',
-            size: 'Talla',
-            material: 'Material',
-            colors: 'Colores',
-            url_image: 'Imagen',
-
-        };
-        return labels[field] || field;
-    };
-
-    // Limpiar formulario
     const handleReset = () => {
         setFormData({
             num_referencia: '',
@@ -265,66 +178,38 @@ const FormAdmin = () => {
             material: '',
             colors: ['#000000'],
         });
+
         setImagePreview(null);
         setErrors({});
         setMessage({ text: '', type: '' });
-
-        // Limpiar input file
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        if (setModo) setModo('crear');
     };
 
-    // Enviar formulario
     const handleSubmit = async e => {
         e.preventDefault();
+        if (!validateForm()) return;
 
-        if (validateForm()) {
-            try {
-                setMessage({ text: 'Enviando datos...', type: 'info' });
-
-                // Usa FormData para enviar todo, incluyendo el archivo
-                const data = new FormData();
-                Object.entries(formData).forEach(([key, value]) => {
-                    // Si el campo es colors (array), lo conviertes a string
-                    if (key === 'colors' && Array.isArray(value)) {
-                        data.append(key, value.join(','));
-                    } else if (key !== 'url_image') { // No envíes url_image
-                        data.append(key, value);
-                    }
-                });
-                if (imageFile) data.append('image', imageFile); // Aquí va el archivo
-
-                const response = await fetch(
-                    `${import.meta.env.VITE_API_URL}/api/registerproduct`,
-                    {
-                        method: 'POST',
-                        body: data,
-                    }
-                );
-
-                if (response.ok) {
-                    setMessage({
-                        text: '¡Producto registrado con éxito!',
-                        type: 'success',
-                    });
-                    handleReset();
-                } else {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Error al registrar el producto');
+        try {
+            const data = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                if (key === 'colors') {
+                    data.append('colors', value.join(','));
+                } else if (['size_min', 'size_max', 'id_producto', 'id_detalle'].includes(key)) {
+                    const simpleValue = Array.isArray(value) ? value[0] : value;
+                    data.append(key, simpleValue.toString());
+                } else if (key !== 'url_image') {
+                    data.append(key, value);
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                setMessage({ text: `Error: ${error.message}`, type: 'error' });
-            }
-        } else {
-            setMessage({
-                text: 'Por favor, complete todos los campos obligatorios',
-                type: 'error',
             });
+            if (imageFile) data.append('image', imageFile);
+            await onSubmit(data);
+            handleReset();
+        } catch (error) {
+            console.error('Error al enviar el formulario:', error);
         }
     };
-
+    const materialOptions = materialOptionsByCategory[formData.category] || [];
     return (
         <div className="form-admin-container">
             <div className="form-admin-header">
@@ -497,7 +382,7 @@ const FormAdmin = () => {
                         </div>
 
                         {/* Material (solo para guayos) */}
-                        {formData.category === 'Guayos' && (
+                        {['Guayos','Balones','Licras'].includes(formData.category) && (
                             <div className="form-group">
                                 <label htmlFor="material">Material*</label>
                                 <select
@@ -619,7 +504,7 @@ const FormAdmin = () => {
                         <FaTrash /> Limpiar
                     </button>
                     <button type="submit" className="submit-button">
-                        <FaSave /> Guardar producto
+                        <FaSave /> {modo === 'editar' ? 'Actualizar producto' : 'Guardar producto'}
                     </button>
                 </div>
             </form>
