@@ -1,9 +1,19 @@
 // FormAdmin.jsx (actualizado con correcciones para cargar tipo al editar)
 import { useState, useRef, useEffect } from 'react';
 import './FormAdmin.css';
-import { FaUpload, FaTrash, FaSave, FaPlus, FaTimes } from 'react-icons/fa';
+import DashboardAdmin from '../dashboard_admin';
+import {
+    FaUpload,
+    FaTrash,
+    FaSave,
+    FaPlus,
+    FaTimes,
+    FaSignOutAlt,
+} from 'react-icons/fa';
 
-const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo }) => {
+
+const FormAdmin = ({ onLogout, productoEditar = null, onSubmit, modo = 'crear', setModo }) => {
+
     const [formData, setFormData] = useState({
         id_producto: '',
         id_detalle: '',
@@ -17,7 +27,9 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
         size_max: '',
         material: '',
         colors: ['#000000'],
+
         ...productoEditar,
+
     });
 
     const [imagePreview, setImagePreview] = useState(productoEditar?.url_image || null);
@@ -38,7 +50,14 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
     const getTypeOptions = (category, subcategory) => {
         if (category === 'Guayos') {
             if (subcategory === 'Amateur') {
-                return ['Zapatilla Futbol Sala FS', 'Botin Zapatilla Futbol Sala', 'Zapatilla Gama Sintetica', 'Botin Zapatilla Gama Sintetica', 'Botin Guayo', 'Guayo'];
+                return [
+                    'Zapatilla Futbol Sala FS',
+                    'Botin Zapatilla Futbol Sala',
+                    'Zapatilla Gama Sintetica',
+                    'Botin Zapatilla Gama Sintetica',
+                    'Botin Guayo',
+                    'Guayo',
+                ];
             } else if (subcategory === 'Profesional') {
                 return ['Botin Guayo', 'Guayo'];
             }
@@ -154,7 +173,15 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
 
     const validateForm = () => {
         const newErrors = {};
-        const requiredFields = ['num_referencia', 'category', 'name', 'subcategory', 'type', 'size_min', 'size_max'];
+        const requiredFields = [
+            'num_referencia',
+            'category',
+            'name',
+            'subcategory',
+            'type',
+            'size_min',
+            'size_max',
+        ];
         requiredFields.forEach(field => {
             if (!formData[field]) newErrors[field] = `El campo ${field} es obligatorio`;
         });
@@ -165,6 +192,24 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
         return Object.keys(newErrors).length === 0;
     };
 
+
+    // Obtener etiqueta para mensajes de error
+    const getFieldLabel = field => {
+        const labels = {
+            num_referencia: 'Número de referencia',
+            category: 'Categoría',
+            name: 'Nombre',
+            subcategory: 'Subcategoría',
+            type: 'Tipo',
+            size: 'Talla',
+            material: 'Material',
+            colors: 'Colores',
+            url_image: 'Imagen',
+        };
+        return labels[field] || field;
+    };
+
+    // Limpiar formulario
     const handleReset = () => {
         setFormData({
             num_referencia: '',
@@ -190,6 +235,7 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
         e.preventDefault();
         if (!validateForm()) return;
 
+
         try {
             const data = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
@@ -200,8 +246,44 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
                     data.append(key, simpleValue.toString());
                 } else if (key !== 'url_image') {
                     data.append(key, value);
-                }
-            });
+
+                    if (validateForm()) {
+                        try {
+                            setMessage({ text: 'Enviando datos...', type: 'info' });
+
+                            // Usa FormData para enviar todo, incluyendo el archivo
+                            const data = new FormData();
+                            Object.entries(formData).forEach(([key, value]) => {
+                                // Si el campo es colors (array), lo conviertes a string
+                                if (key === 'colors' && Array.isArray(value)) {
+                                    data.append(key, value.join(','));
+                                } else if (key !== 'url_image') {
+                                    // No envíes url_image
+                                    data.append(key, value);
+                                }
+                            });
+                            if (imageFile) data.append('image', imageFile); // Aquí va el archivo
+
+                            const response = await fetch(
+                                `${import.meta.env.VITE_API_URL}/api/registerproduct`,
+                                {
+                                    method: 'POST',
+                                    body: data,
+                                }
+                            );
+
+                            if (response.ok) {
+                                setMessage({
+                                    text: '¡Producto registrado con éxito!',
+                                    type: 'success',
+                                });
+                                handleReset();
+                            } else {
+                                const error = await response.json();
+                                throw new Error(error.message || 'Error al registrar el producto');
+
+                            }
+                        });
             if (imageFile) data.append('image', imageFile);
             await onSubmit(data);
             handleReset();
@@ -209,7 +291,9 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
             console.error('Error al enviar el formulario:', error);
         }
     };
+
     const materialOptions = materialOptionsByCategory[formData.category] || [];
+
     return (
         <div className="form-admin-container">
             <div className="form-admin-header">
@@ -219,6 +303,9 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
                     className="form-admin-logo"
                 />
                 <h2>Registro de Productos</h2>
+                <button onClick={onLogout} className="logout-button" type="button">
+                    <FaSignOutAlt /> Cerrar sesión
+                </button>
             </div>
 
             {message.text && (
@@ -382,7 +469,7 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
                         </div>
 
                         {/* Material (solo para guayos) */}
-                        {['Guayos','Balones','Licras'].includes(formData.category) && (
+                        {['Guayos', 'Balones', 'Licras'].includes(formData.category) && (
                             <div className="form-group">
                                 <label htmlFor="material">Material*</label>
                                 <select
@@ -406,7 +493,7 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
                         )}
 
                         {/* Talla */}
-                        <div className='size_group'>
+                        <div className="size_group">
                             <div className="form-group _smin">
                                 <label htmlFor="size">Talla mínima</label>
                                 <select
@@ -508,6 +595,7 @@ const FormAdmin = ({ productoEditar = null, onSubmit, modo = 'crear', setModo })
                     </button>
                 </div>
             </form>
+            <DashboardAdmin />
         </div>
     );
 };
