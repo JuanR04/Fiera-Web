@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import FormAdmin from "../form-admin/FormAdmin";
+import  {FaSignOutAlt} from 'react-icons/fa';
 import "./panel_products.css";
 
-const PanelProducts = () => {
+const PanelProducts = ({onLogout}) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [productoEditar, setProductoEditar] = useState(null); // para editar
@@ -90,6 +91,9 @@ const PanelProducts = () => {
 
     return (
         <div className="panel-products-container">
+            <button onClick={onLogout} className="logout-button" type="button">
+                <FaSignOutAlt /> Cerrar sesión
+            </button>
             <FormAdmin
                 productoEditar={productoEditar}
                 onSubmit={handleSubmit}

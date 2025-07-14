@@ -1,6 +1,12 @@
+.panel-products-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .Table_products {
-    width: 85%;
-    margin: 50px;
+    width: 100%;
+    margin-top:20px;
     border-collapse: collapse;
     overflow-x: auto;
     border: 3px solid rgb(0, 0, 0);

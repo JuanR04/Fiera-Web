@@ -8,11 +8,10 @@ import {
     FaSave,
     FaPlus,
     FaTimes,
-    FaSignOutAlt,
 } from 'react-icons/fa';
 
 
-const FormAdmin = ({ onLogout, productoEditar = null, onSubmit, modo = 'crear', setModo }) => {
+const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) => {
 
     const [formData, setFormData] = useState({
         id_producto: '',
@@ -235,60 +234,31 @@ const FormAdmin = ({ onLogout, productoEditar = null, onSubmit, modo = 'crear', 
         e.preventDefault();
         if (!validateForm()) return;
 
-
         try {
+            setMessage({ text: 'Enviando datos...', type: 'info' });
+
             const data = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
                 if (key === 'colors') {
-                    data.append('colors', value.join(','));
+                    data.append(key, value.join(','));
                 } else if (['size_min', 'size_max', 'id_producto', 'id_detalle'].includes(key)) {
                     const simpleValue = Array.isArray(value) ? value[0] : value;
                     data.append(key, simpleValue.toString());
                 } else if (key !== 'url_image') {
                     data.append(key, value);
+                }
+            });
 
-                    if (validateForm()) {
-                        try {
-                            setMessage({ text: 'Enviando datos...', type: 'info' });
+            if (imageFile) {
+                data.append('image', imageFile);
+            }
 
-                            // Usa FormData para enviar todo, incluyendo el archivo
-                            const data = new FormData();
-                            Object.entries(formData).forEach(([key, value]) => {
-                                // Si el campo es colors (array), lo conviertes a string
-                                if (key === 'colors' && Array.isArray(value)) {
-                                    data.append(key, value.join(','));
-                                } else if (key !== 'url_image') {
-                                    // No envíes url_image
-                                    data.append(key, value);
-                                }
-                            });
-                            if (imageFile) data.append('image', imageFile); // Aquí va el archivo
-
-                            const response = await fetch(
-                                `${import.meta.env.VITE_API_URL}/api/registerproduct`,
-                                {
-                                    method: 'POST',
-                                    body: data,
-                                }
-                            );
-
-                            if (response.ok) {
-                                setMessage({
-                                    text: '¡Producto registrado con éxito!',
-                                    type: 'success',
-                                });
-                                handleReset();
-                            } else {
-                                const error = await response.json();
-                                throw new Error(error.message || 'Error al registrar el producto');
-
-                            }
-                        });
-            if (imageFile) data.append('image', imageFile);
-            await onSubmit(data);
+            await onSubmit(data); // esta llamada depende de si es modo 'editar' o 'crear'
+            setMessage({ text: '¡Producto guardado con éxito!', type: 'success' });
             handleReset();
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
+            setMessage({ text: 'Error al enviar el producto.', type: 'error' });
         }
     };
 
@@ -303,9 +273,7 @@ const FormAdmin = ({ onLogout, productoEditar = null, onSubmit, modo = 'crear', 
                     className="form-admin-logo"
                 />
                 <h2>Registro de Productos</h2>
-                <button onClick={onLogout} className="logout-button" type="button">
-                    <FaSignOutAlt /> Cerrar sesión
-                </button>
+                
             </div>
 
             {message.text && (
@@ -595,7 +563,6 @@ const FormAdmin = ({ onLogout, productoEditar = null, onSubmit, modo = 'crear', 
                     </button>
                 </div>
             </form>
-            <DashboardAdmin />
         </div>
     );
 };
