@@ -8,16 +8,17 @@ import CarouselD from '../../components/corousel/desktop/Carousel';
 
 const Catalog = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para manejar la visibilidad de los filtros
-  const [openedCategories, setOpenedCategories] = useState({});// Estado para manejar las categorías abiertas
+  const [openedCategories, setOpenedCategories] = useState({}); // Estado para manejar las categorías abiertas
   const [selectedProduct, setSelectedProduct] = useState(null); // Estado para manejar el producto seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar la visibilidad del modal
 
-  const { filters, applyFilter, clearFilters } = useCatalog(); // Obtener filtros y funciones del contexto
+  const { filters, applyFilter, clearFilters, searchTerm } = useCatalog(); // Obtener filtros y funciones del contexto
 
   const toggleFilter = () => setIsFilterOpen(!isFilterOpen); // Función para alternar la visibilidad de los filtros
   const closeFilter = () => setIsFilterOpen(false); // Función para cerrar los filtros
 
-  const toggleCategory = category => { // Función para alternar la visibilidad de las subcategorías
+  const toggleCategory = category => {
+    // Función para alternar la visibilidad de las subcategorías
     setOpenedCategories(prev => ({ ...prev, [category]: !prev[category] }));
   };
 
@@ -58,7 +59,7 @@ const Catalog = () => {
     },
     {
       name: 'Guayos',
-      subcategories: ['Profesionales', 'Amateur', 'Niños'],
+      subcategories: ['Profesional', 'Amateur', 'Niños'],
     },
     {
       name: 'Licras',
@@ -78,8 +79,15 @@ const Catalog = () => {
     <div className="catalog-container">
       {/* Banner principal */}
       <header className="catalog-banner">
-        <CarouselD/>
+        <CarouselD />
       </header>
+
+      {/* Título de búsqueda */}
+      {searchTerm && (
+        <div className="search-results-title">
+          <h2>Resultados para: "{searchTerm}"</h2>
+        </div>
+      )}
 
       {/* Filtros móviles */}
       <div className="mobile-filters">
@@ -223,6 +231,7 @@ const Catalog = () => {
             onProductClick={handleProductClick}
             showPromotion={true}
             promotionAfter={6}
+            searchTerm={searchTerm}
           />
         </main>
       </div>
