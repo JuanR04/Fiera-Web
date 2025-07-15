@@ -1,12 +1,12 @@
-import FormAdmin from "./form-admin/FormAdmin";
-import PanelProducts from "./panel_products/panel_products";
+import PanelProducts from './panel_products/panel_products';
+import { FaSignOutAlt } from 'react-icons/fa';
+const DashboardAdmin = ({ onLogout }) => {
 
-const DashboardAdmin = () =>{
-    return(
+    return (
         <>
-            <PanelProducts/>
+            <PanelProducts onLogout={onLogout} />;
         </>
     )
-}
+};
 
 export default DashboardAdmin;

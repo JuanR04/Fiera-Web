@@ -1,5 +1,5 @@
 
-import { findProducts, CreateProducts, UpdateProductsId,findProductById, deleteProducts } from "../models/productModel.js";
+import { findProducts, CreateProducts, UpdateProductsId, findProductById, deleteProducts } from "../models/productModel.js";
 import { createDetailsProduct, UpdateDetailsProduct } from "../models/productDetailModel.js";
 import cloudinary from "../config/cloudinaryConfig.js";
 import multer from 'multer';
@@ -50,87 +50,112 @@ export const registerProduct = [
 ]
 
 
-export const UpdateProduct = [upload.single('image'),
-async (req, res) => {
-    const { id_detalle, id_producto, num_referencia, category, description, name, subcategory, type, size_min, size_max, material, colors } = req.body;
-    if (
-        !num_referencia ||
-        !category ||
-        !name ||
-        !subcategory ||
-        !type ||
-        !size_min ||
-        !size_max ||
-        !material ||
-        !colors
-    ) {
-        return res.status(400).json({ message: "Todos los campos son obligatorios excepto la descripción." });
-    }
-    try {
-        const product = await findProductById(id_producto);
+export const UpdateProduct = [
+    upload.single('image'),
+    async (req, res) => {
+        const {
+            id_detalle, id_producto, num_referencia, category, description,
+            name, subcategory, type, size_min, size_max, material, colors
+        } = req.body;
 
-        if (!product) {
-            return res.status(404).json({ message: "Producto no encontrado" });
+        if (
+            !num_referencia || !category || !name || !subcategory ||
+            !type || !size_min || !size_max || !material || !colors
+        ) {
+            return res.status(400).json({ message: "Todos los campos son obligatorios excepto la descripción." });
         }
-        
-        const oldimageurl = product.url_image;
 
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const url_image = result.secure_url;
+        try {
+            const product = await findProductById(id_producto);
+            if (!product) {
+                return res.status(404).json({ message: "Producto no encontrado" });
+            }
 
-        const updatedProduct = await UpdateProductsId(id_producto, num_referencia, category, url_image, description);
-        const updateDetails = await UpdateDetailsProduct(id_detalle, name, subcategory, type, colors, size_min, size_max, material);
+            let url_image = product.url_image;
 
-        if (oldimageurl) {
-            const publicId = product.url_image.split('/').pop().split('.')[0];
-            await cloudinary.uploader.destroy(publicId);
+            // Subir nueva imagen si se proporciona
+            if (req.file) {
+                const result = await cloudinary.uploader.upload(req.file.path);
+                url_image = result.secure_url;
 
+                // Eliminar imagen anterior en Cloudinary
+                if (product.url_image) {
+                    const publicId = product.url_image.split('/').pop().split('.')[0];
+                    await cloudinary.uploader.destroy(publicId);
+                }
+            }
+
+            const updatedProduct = await UpdateProductsId(
+                id_producto,
+                num_referencia,
+                category,
+                url_image,
+                description
+            );
+
+            const updateDetails = await UpdateDetailsProduct(
+                id_detalle,
+                name,
+                subcategory,
+                type,
+                colors,
+                size_min,
+                size_max,
+                material
+            );
+
+            res.status(201).json({
+                message: "productos actualizados correctamente",
+                updateDetails,
+                updatedProduct
+            });
+
+        } catch (error) {
+            res.status(500).json({
+                message: "error de servidor",
+                error: error.message
+            });
         }
-        res.status(201).json({ message: "productos actualizados correctamente", updateDetails, updatedProduct })
-
-    } catch (error) {
-        res.status(500).json({ message: "error de servidor", error: error.message })
     }
+];
 
-
-}]
 // Controlador para obtener un producto por ID
-export const getProductById = async(req, res) => {
+export const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
         const product = await findProductById(id);
-        
+
         if (!product) {
             return res.status(404).json({ message: "Producto no encontrado" });
         }
-        
+
         res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({message: "Error en el servidor al obtener el producto",error: error.message});
+        res.status(500).json({ message: "Error en el servidor al obtener el producto", error: error.message });
     }
 };
 
-export const deleteProductById = async(req,res)=>{
-    try{
-        const {id} = req.params; 
+export const deleteProductById = async (req, res) => {
+    try {
+        const { id } = req.params;
 
-        
+
         const product = await findProductById(id);
-        if(!product){
-            return res.status(404).json({message: "No se encontró el producto"});
+        if (!product) {
+            return res.status(404).json({ message: "No se encontró el producto" });
         }
-        
-        if(product.url_image){
-            
+
+        if (product.url_image) {
+
             const publicId = product.url_image.split('/').pop().split('.')[0];
             await cloudinary.uploader.destroy(publicId);
         }
-        
+
         const deleteProduct = await deleteProducts(id);
 
-        res.status(200).json({message: "Producto eliminado correctamente", product: deleteProduct});// Se envia el producto eliminado como respuesta.
+        res.status(200).json({ message: "Producto eliminado correctamente", product: deleteProduct });// Se envia el producto eliminado como respuesta.
 
-    }catch(error){
-        res.status(500).json({message: "Error en el servidor", error: error.message});
+    } catch (error) {
+        res.status(500).json({ message: "Error en el servidor", error: error.message });
     }
 }
