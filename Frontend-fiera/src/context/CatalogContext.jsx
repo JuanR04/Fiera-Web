@@ -25,7 +25,7 @@ export const CatalogProvider = ({ children }) => {
   
   // Estados para paginación del catalogo
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(3); // aqui se establece el numero de productos por pagina
+  const [productsPerPage, setProductsPerPage] = useState(10); // aqui se establece el numero de productos por pagina
   const [totalProducts, setTotalProducts] = useState(0);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
