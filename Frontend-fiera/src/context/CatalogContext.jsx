@@ -22,13 +22,22 @@ export const CatalogProvider = ({ children }) => {
   });
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(''); // Estado para término de búsqueda
+  
+  // Estados para paginación del catalogo
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage, setProductsPerPage] = useState(3); // aqui se establece el numero de productos por pagina
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/getproduct`)
       .then(res => res.json())
       .then(data => {
         console.log('Datos del backend', data);
-        setProduct(Array.isArray(data) ? data : []);
+        const productsArray = Array.isArray(data) ? data : [];
+        setProduct(productsArray);
+        setTotalProducts(productsArray.length);
         setLoading(false);
       })
       .catch(error => {
@@ -36,6 +45,14 @@ export const CatalogProvider = ({ children }) => {
         setLoading(false);
       });
   }, []);
+
+  // Calcular productos paginados cada vez que cambia el filtrado o la página
+  useEffect(() => {
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    setProducts(filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct));
+    setTotalPages(Math.ceil(filteredProducts.length / productsPerPage));
+  }, [filteredProducts, currentPage, productsPerPage]);
 
   // Función para buscar productos
   const searchProducts = query => {
@@ -77,12 +94,41 @@ export const CatalogProvider = ({ children }) => {
     setSearchTerm(query);
     setLoading(true);
     const results = searchProducts(query);
-    setProducts(results);
+    setFilteredProducts(results);
+    setCurrentPage(1); // Volver a la primera página al buscar
     setLoading(false);
 
     // Actualizar URL y limpiar filtros
     setFilters({ category: '', subcategory: '', ageGroup: '' });
     setSearchParams({ q: query });
+  };
+
+  // Cambiar de página
+  const changePage = (pageNumber) => {
+    // Validar que la página esté dentro de los límites
+    if (pageNumber < 1 || pageNumber > totalPages) return;
+    
+    setCurrentPage(pageNumber);
+    
+    // Opcional: Hacer scroll hacia arriba cuando cambia de página
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // Ir a la página siguiente
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      changePage(currentPage + 1);
+    }
+  };
+
+  // Ir a la página anterior
+  const prevPage = () => {
+    if (currentPage > 1) {
+      changePage(currentPage - 1);
+    }
   };
 
   // Guardar búsqueda reciente
@@ -131,26 +177,27 @@ export const CatalogProvider = ({ children }) => {
       // Simular delay de red
       await new Promise(resolve => setTimeout(resolve, 300));
 
-      let filteredProducts = [...product];
+      let results = [...product];
 
       // Aplicar filtros
       if (currentFilters.category) {
-        filteredProducts = filteredProducts.filter(
+        results = results.filter(
           p => p.category === currentFilters.category
         );
       }
       if (currentFilters.subcategory) {
-        filteredProducts = filteredProducts.filter(
+        results = results.filter(
           p => p.subcategory === currentFilters.subcategory
         );
       }
       if (currentFilters.ageGroup) {
-        filteredProducts = filteredProducts.filter(
+        results = results.filter(
           p => p.ageGroup === currentFilters.ageGroup
         );
       }
 
-      setProducts(filteredProducts);
+      setFilteredProducts(results);
+      setCurrentPage(1); // Volver a la primera página al filtrar
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -161,12 +208,15 @@ export const CatalogProvider = ({ children }) => {
   // Al cargar, lee los filtros o búsqueda de la URL
   useEffect(() => {
     const query = searchParams.get('q') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
+
+    setCurrentPage(page);
 
     if (query) {
       // Si hay una búsqueda en la URL
       setSearchTerm(query);
       const results = searchProducts(query);
-      setProducts(results);
+      setFilteredProducts(results);
     } else {
       // Si no hay búsqueda, aplicar filtros normales
       const category = searchParams.get('category') || '';
@@ -197,6 +247,12 @@ export const CatalogProvider = ({ children }) => {
     fetchProducts(clearedFilters);
   };
 
+  // Cambiar productos por página
+  const setItemsPerPage = (amount) => {
+    setProductsPerPage(amount);
+    setCurrentPage(1); // Volver a la primera página al cambiar elementos por página
+  };
+
   return (
     <CatalogContext.Provider
       value={{
@@ -204,10 +260,18 @@ export const CatalogProvider = ({ children }) => {
         loading,
         filters,
         searchTerm,
+        currentPage,
+        totalPages,
+        productsPerPage,
+        totalProducts: filteredProducts.length,
         applyFilter,
         clearFilters,
         applySearch,
         getRecentSearches,
+        changePage,
+        nextPage,
+        prevPage,
+        setItemsPerPage
       }}
     >
       {children}

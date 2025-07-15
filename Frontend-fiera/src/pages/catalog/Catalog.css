@@ -9,11 +9,9 @@
   height: fit-content;
   margin: 20px 0 20px 0;
   background-color: transparent;
-  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.12);
-
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18),
+    0 1.5px 6px 0 rgba(0, 0, 0, 0.12);
 }
-
-
 
 /* Imagen del guayo */
 .banner-logo {
@@ -316,7 +314,6 @@
 
 /* === TABLET (768px+) === */
 @media (min-width: 768px) {
-
   .banner-logo {
     max-width: 250px;
   }
@@ -375,10 +372,8 @@
 
 /* === DESKTOP LARGE (1440px+) === */
 @media (min-width: 1440px) {
-
   .banner-logo {
     max-width: 450px;
-
   }
 
   .catalog-banner h1 {
@@ -389,4 +384,13 @@
     max-width: 1400px;
     margin: 0 auto;
   }
+}
+
+.products-summary {
+  text-align: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #555;
+  font-size: 0.95rem;
+  font-weight: 500;
 }

@@ -5,6 +5,7 @@ import { useCatalog } from '../../context/CatalogContext';
 import ProductGrid from '../../components/ProductGrid/ProductGrid';
 import ProductModal from '../../components/ProductModal/ProductModal';
 import CarouselD from '../../components/corousel/desktop/Carousel';
+import Pagination from '../../components/Pagination/Pagination';
 
 const Catalog = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para manejar la visibilidad de los filtros
@@ -12,7 +13,18 @@ const Catalog = () => {
   const [selectedProduct, setSelectedProduct] = useState(null); // Estado para manejar el producto seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar la visibilidad del modal
 
-  const { filters, applyFilter, clearFilters, searchTerm } = useCatalog(); // Obtener filtros y funciones del contexto
+  const {
+    filters,
+    applyFilter,
+    clearFilters,
+    searchTerm,
+    currentPage,
+    totalPages,
+    changePage,
+    nextPage,
+    prevPage,
+    totalProducts,
+  } = useCatalog(); // Obtener filtros y funciones del contexto
 
   const toggleFilter = () => setIsFilterOpen(!isFilterOpen); // Función para alternar la visibilidad de los filtros
   const closeFilter = () => setIsFilterOpen(false); // Función para cerrar los filtros
@@ -232,6 +244,29 @@ const Catalog = () => {
             showPromotion={true}
             promotionAfter={6}
             searchTerm={searchTerm}
+          />
+
+          {/* Mostrar resumen de productos si hay resultados */}
+          {totalProducts > 0 && (
+            <div className="products-summary">
+              {totalProducts === 1 ? (
+                <span>Mostrando el único producto disponible</span>
+              ) : (
+                <span>
+                  Página {currentPage} de {totalPages}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Paginación */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={changePage}
+            onPrevPage={prevPage}
+            onNextPage={nextPage}
+            className="catalog-pagination"
           />
         </main>
       </div>
