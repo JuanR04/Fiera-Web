@@ -47,7 +47,7 @@ const Home = () => {
                     <img src="/images/balon_futbol_sala.png" alt="" />
                     <h2>Sé un ganador</h2>
                     <h3>Conquista la cancha con clase y potencia</h3>
-                    <NavLink className={"btn_verbalones"} to="/catalogo?category=Balones">Ver balones</NavLink>
+                    <NavLink className={"btn_"} to="/catalogo?category=Balones">Ver balones</NavLink>
                 </div>
                 <div className="container __view_boots">
 
@@ -55,8 +55,20 @@ const Home = () => {
                 <div className="container __publicite_container">
                     {isMobile ? <Carousel /> : <DesktopPresentation />}
                 </div>
-                <div className="container __view_catalog">
-
+                <div className="container __mayorista_container">
+                    <div className="mayorista_content">
+                        <div className="mayorista_text">
+                            <h2>Guayos al por mayor</h2>
+                            <h3>Directo de fábrica</h3>
+                            <p>
+                                Somos fabricantes de guayos y ofrecemos venta exclusiva al por mayor para tiendas deportivas y distribuidores.
+                                ¡Calidad profesional a precios directos de fábrica!
+                            </p>
+                            <NavLink className="btn_" to="/catalogo?category=Guayos">
+                                Ver catálogo
+                            </NavLink>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

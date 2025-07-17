@@ -47,17 +47,14 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                 <strong>Categoría:</strong> {product.category}
               </div>
               <div className="detail-item">
-                <strong>Tipo:</strong> {product.subcategory}
+                <strong>Sub-Categoria:</strong> {product.subcategory}
               </div>
-              {/* <div className="detail-item">
-                  <strong>Edad:</strong>{' '}
-                  {product.ageGroup === 'adulto' ? 'Adulto' : 'Niño'}
-                </div> */}
+
               <div className="detail-item">
                 <strong>Num Referencia:</strong> {product.num_referencia}
               </div>
               <div className="detail-item">
-                <strong>Sub-Categoría:</strong> {product.subcategory}
+                <strong>Tipo:</strong> {product.type}
               </div>
               <div className="detail-item">
                 <strong>Talla:</strong> {product.size_min} - {product.size_max}

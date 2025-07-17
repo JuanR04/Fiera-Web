@@ -61,9 +61,9 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                 return ['Botin Guayo', 'Guayo'];
             }
         } else if (category === 'Balones') {
-            return ['micro', 'futbol', 'futsala', 'futsalon'];
+            return ['Micro', 'Futbol', 'Fut-sala', 'Fut-salon'];
         } else if (category === 'Licras') {
-            return ['buzo', 'licra corta', 'licra larga'];
+            return ['Buzo', 'Licra corta', 'Licra larga'];
         }
         return [];
     };

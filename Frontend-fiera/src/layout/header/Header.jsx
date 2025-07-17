@@ -151,8 +151,8 @@ const Header = () => {
       <nav className="nav_list">
         <ul className="__list">
           <li className="list__item">
-            <NavLink className={'item'} to="/ofertas">
-              Ofertas
+            <NavLink className={'item'} to="/catalogo?category=Guayos">
+              Fábrica
             </NavLink>
           </li>
           <li className="list__item">
@@ -185,8 +185,8 @@ const Header = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/ofertas" onClick={closeMenu}>
-              Ofertas
+            <NavLink to="/catalogo?category=Guayos" onClick={closeMenu}>
+              Fábrica
             </NavLink>
           </li>
         </ul>
