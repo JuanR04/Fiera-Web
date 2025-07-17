@@ -22,6 +22,7 @@ const Header = () => {
     'guayos amateur',
     'balones futsal',
     'licras deportivas',
+    'balones',
     
   ];
 
@@ -130,15 +131,17 @@ const Header = () => {
                 <FaFire style={{ marginRight: '8px', fontSize: '12px' }} />
                 Búsquedas populares:
               </span>
-              {popularSearches.map((term, i) => (
-                <div
-                  key={i}
-                  className="suggestion-item"
-                  onClick={() => handleSelectSuggestion(term)}
-                >
-                  {term}
-                </div>
-              ))}
+              <div className="popular-searches-container">
+                {popularSearches.map((term, i) => (
+                  <div
+                    key={i}
+                    className="popular-search-pill"
+                    onClick={() => handleSelectSuggestion(term)}
+                  >
+                    {term}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
