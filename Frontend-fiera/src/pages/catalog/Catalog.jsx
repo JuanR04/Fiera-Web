@@ -10,6 +10,7 @@ import Pagination from '../../components/Pagination/Pagination';
 const Catalog = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para manejar la visibilidad de los filtros
   const [openedCategories, setOpenedCategories] = useState({}); // Estado para manejar las categorías abiertas
+  const [openedSubCategories, setopenedSubCategories] = useState({});//Estado para manejar las subcategorías abiertas
   const [selectedProduct, setSelectedProduct] = useState(null); // Estado para manejar el producto seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar la visibilidad del modal
 
@@ -60,46 +61,65 @@ const Catalog = () => {
     if (filters.subcategory === subcategoryName) {
       applyFilter('subcategory', '');
     } else {
-      applyFilter('subcategory', subcategoryName);
+      applyFilter('type', typeName);
+    }
+  };
+  const handleSubCategoryClick = subcategory => {
+    if (filters.type === subcategory) {
+      applyFilter('type', '');
+    } else {
+      applyFilter('type', subcategory);
     }
   };
 
   const filterCategories = [
     {
       name: 'Balones',
-      subcategories: ['Micro', 'Fut-sala', 'Profesionales', 'Training'],
+      subcategories: [
+        {
+          name: 'Futbol',
+          types: ['Micro', 'Fut-sala', 'Futbol', 'Fut-salón'],
+        }],
     },
     {
       name: 'Guayos',
-      subcategories: ['Profesional', 'Amateur', 'Niños'],
+      subcategories: [
+        {
+          name: 'Profesional',
+          types: ['Botin Guayo', 'Guayo']
+        },
+        {
+          name: 'Amateur',
+          types: ['Zapatilla Futbol Sala FS', 'Botin Zapatilla Futbol Sala', 'Zapatilla Gama Sintetica', 'Botin Zapatilla Gama Sintetica', 'Botin Guayo', 'Guayo']
+        }
+      ]
     },
     {
       name: 'Licras',
-      subcategories: ['Camisetas', 'Shorts', 'Medias'],
-    },
-    {
-      name: 'Novedades',
-      subcategories: [],
-    },
-    {
-      name: 'Ofertas',
-      subcategories: [],
-    },
+      subcategories: [
+        {
+          name:'Deportivas',
+          types:['Buzo','Licra corta','Licra larga']
+        }
+      ]
+    }
   ];
 
   return (
-    <div className="catalog-container">
+    <div className="catalog-container" >
       {/* Banner principal */}
-      <header className="catalog-banner">
+      < header className="catalog-banner" >
         <CarouselD />
-      </header>
+      </header >
 
       {/* Título de búsqueda */}
-      {searchTerm && (
-        <div className="search-results-title">
-          <h2>Resultados para: "{searchTerm}"</h2>
-        </div>
-      )}
+      {
+        searchTerm && (
+          <div className="search-results-title">
+            <h2>Resultados para: "{searchTerm}"</h2>
+          </div>
+        )
+      }
 
       {/* Filtros móviles */}
       <div className="mobile-filters">
@@ -187,16 +207,34 @@ const Catalog = () => {
                     {category.subcategories.map((sub, subIndex) => (
                       <button
                         key={subIndex}
-                        className={`subcategory-button ${
-                          filters.subcategory === sub ? 'active' : ''
-                        }`}
-                        onClick={() => handleSubcategoryClick(sub)}
+                        className={`subcategory-button ${filters.subcategory === sub.name ? 'active' : ''
+                          }`}
+                        onClick={() => handleSubCategoryClick(sub)}
                       >
-                        {sub}
+                        {sub.name}
                       </button>
                     ))}
                   </div>
+
                 )}
+                {Array.isArray(category.subcategories) && category.subcategories.map((subcat, index) => (
+                  Array.isArray(subcat.types) && subcat.types.length > 0 && (
+                    <div
+                      key={index}
+                      className={`types ${openedSubCategories?.[subcat.name] ? 'open' : ''}`}
+                    >
+                      {subcat.types.map((type, typeIndex) => (
+                        <button
+                          key={typeIndex}
+                          className={`subcategory-button ${filters.type === type ? 'active' : ''}`}
+                          onClick={() => handleTypeClick(type)}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  )
+                ))}
               </div>
             ))}
           </div>
@@ -272,9 +310,11 @@ const Catalog = () => {
       </div>
 
       {/* Overlay para móvil */}
-      {isFilterOpen && (
-        <div className="filter-overlay" onClick={closeFilter}></div>
-      )}
+      {
+        isFilterOpen && (
+          <div className="filter-overlay" onClick={closeFilter}></div>
+        )
+      }
 
       {/* Modal de producto */}
       <ProductModal
@@ -282,7 +322,7 @@ const Catalog = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </div>
+    </div >
   );
 };
 
