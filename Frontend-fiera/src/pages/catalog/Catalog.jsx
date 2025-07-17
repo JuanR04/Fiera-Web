@@ -56,35 +56,26 @@ const Catalog = () => {
   };
 
   // Manejar click en subcategoría
-  const handleTypeClick = typeName => {
-    if (filters.type === typeName) {
-      applyFilter('type', '');
+  const handleSubcategoryClick = subcategoryName => {
+    if (filters.subcategory === subcategoryName) {
+      applyFilter('subcategory', '');
     } else {
-      applyFilter('type', typeName);
+      applyFilter('subcategory', subcategoryName);
     }
   };
-  const handleSubCategoryClick = subcategory=>{
-    if (filters.type === subcategory) {
-      applyFilter('type', '');
-    } else {
-      applyFilter('type', subcategory);
-    }
-  }
 
   const filterCategories = [
     {
       name: 'Balones',
-      subcategories: ['Futbol'],
-      types: ['Micro', 'Fut-sala', 'Futbol', 'Fut-salón'],
+      subcategories: ['Micro', 'Fut-sala', 'Profesionales', 'Training'],
     },
     {
       name: 'Guayos',
-      subcategories: ['Profesional', 'Amateur'],
-      types: []
+      subcategories: ['Profesional', 'Amateur', 'Niños'],
     },
     {
       name: 'Licras',
-      subcategories: ['Buzo', 'Licra corta', 'Licra larga'],
+      subcategories: ['Camisetas', 'Shorts', 'Medias'],
     },
     {
       name: 'Novedades',
@@ -164,8 +155,9 @@ const Catalog = () => {
             {filterCategories.map((category, index) => (
               <div key={index} className="filter-category">
                 <button
-                  className={`category-button ${filters.category === category.name ? 'active' : ''
-                    }`}
+                  className={`category-button ${
+                    filters.category === category.name ? 'active' : ''
+                  }`}
                   onClick={() => handleCategoryClick(category.name)}
                 >
                   <span>{category.name}</span>
@@ -188,15 +180,17 @@ const Catalog = () => {
 
                 {category.subcategories.length > 0 && (
                   <div
-                    className={`subcategories ${openedCategories[category.name] ? 'open' : ''
-                      }`}
+                    className={`subcategories ${
+                      openedCategories[category.name] ? 'open' : ''
+                    }`}
                   >
                     {category.subcategories.map((sub, subIndex) => (
                       <button
                         key={subIndex}
-                        className={`subcategory-button ${filters.subcategory === sub ? 'active' : ''
-                          }`}
-                        onClick={() => handleTypeClick(sub)}
+                        className={`subcategory-button ${
+                          filters.subcategory === sub ? 'active' : ''
+                        }`}
+                        onClick={() => handleSubcategoryClick(sub)}
                       >
                         {sub}
                       </button>
