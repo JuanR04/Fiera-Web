@@ -10,7 +10,7 @@ import Pagination from '../../components/Pagination/Pagination';
 const Catalog = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Estado para manejar la visibilidad de los filtros
   const [openedCategories, setOpenedCategories] = useState({}); // Estado para manejar las categorías abiertas
-  const [openedSubCategories, setopenedSubCategories] = useState({});//Estado para manejar las subcategorías abiertas
+  const [openedSubCategories, setopenedSubCategories] = useState({}); //Estado para manejar las subcategorías abiertas
   const [selectedProduct, setSelectedProduct] = useState(null); // Estado para manejar el producto seleccionado
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar la visibilidad del modal
 
@@ -56,19 +56,26 @@ const Catalog = () => {
     }
   };
 
-  // Manejar click en subcategoría
-  const handleSubcategoryClick = subcategoryName => {
-    if (filters.subcategory === subcategoryName) {
+  const handleSubCategoryClick = subcategory => {
+    // Recibe el objeto subcategoría
+    if (filters.subcategory === subcategory.name) {
       applyFilter('subcategory', '');
     } else {
-      applyFilter('type', typeName);
+      applyFilter('subcategory', subcategory.name);
+      // Opcional: abrir/cerrar la lista de tipos
+      setopenedSubCategories(prev => ({
+        ...prev,
+        [subcategory.name]: !prev[subcategory.name],
+      }));
     }
   };
-  const handleSubCategoryClick = subcategory => {
-    if (filters.type === subcategory) {
+
+  // Añade esta función que falta
+  const handleTypeClick = type => {
+    if (filters.type === type) {
       applyFilter('type', '');
     } else {
-      applyFilter('type', subcategory);
+      applyFilter('type', type);
     }
   };
 
@@ -79,47 +86,53 @@ const Catalog = () => {
         {
           name: 'Futbol',
           types: ['Micro', 'Fut-sala', 'Futbol', 'Fut-salón'],
-        }],
+        },
+      ],
     },
     {
       name: 'Guayos',
       subcategories: [
         {
           name: 'Profesional',
-          types: ['Botin Guayo', 'Guayo']
+          types: ['Botin Guayo', 'Guayo'],
         },
         {
           name: 'Amateur',
-          types: ['Zapatilla Futbol Sala FS', 'Botin Zapatilla Futbol Sala', 'Zapatilla Gama Sintetica', 'Botin Zapatilla Gama Sintetica', 'Botin Guayo', 'Guayo']
-        }
-      ]
+          types: [
+            'Zapatilla Futbol Sala FS',
+            'Botin Zapatilla Futbol Sala',
+            'Zapatilla Gama Sintetica',
+            'Botin Zapatilla Gama Sintetica',
+            'Botin Guayo',
+            'Guayo',
+          ],
+        },
+      ],
     },
     {
       name: 'Licras',
       subcategories: [
         {
-          name:'Deportivas',
-          types:['Buzo','Licra corta','Licra larga']
-        }
-      ]
-    }
+          name: 'Deportivas',
+          types: ['Buzo', 'Licra corta', 'Licra larga'],
+        },
+      ],
+    },
   ];
 
   return (
-    <div className="catalog-container" >
+    <div className="catalog-container">
       {/* Banner principal */}
-      < header className="catalog-banner" >
+      <header className="catalog-banner">
         <CarouselD />
-      </header >
+      </header>
 
       {/* Título de búsqueda */}
-      {
-        searchTerm && (
-          <div className="search-results-title">
-            <h2>Resultados para: "{searchTerm}"</h2>
-          </div>
-        )
-      }
+      {searchTerm && (
+        <div className="search-results-title">
+          <h2>Resultados para: "{searchTerm}"</h2>
+        </div>
+      )}
 
       {/* Filtros móviles */}
       <div className="mobile-filters">
@@ -174,6 +187,7 @@ const Catalog = () => {
 
             {filterCategories.map((category, index) => (
               <div key={index} className="filter-category">
+                {/* Botón de categoría */}
                 <button
                   className={`category-button ${
                     filters.category === category.name ? 'active' : ''
@@ -198,6 +212,7 @@ const Catalog = () => {
                   )}
                 </button>
 
+                {/* Contenedor de subcategorías */}
                 {category.subcategories.length > 0 && (
                   <div
                     className={`subcategories ${
@@ -205,36 +220,59 @@ const Catalog = () => {
                     }`}
                   >
                     {category.subcategories.map((sub, subIndex) => (
-                      <button
-                        key={subIndex}
-                        className={`subcategory-button ${filters.subcategory === sub.name ? 'active' : ''
+                      <div key={subIndex} className="subcategory-wrapper">
+                        {/* Botón de subcategoría */}
+                        <button
+                          className={`subcategory-button ${
+                            filters.subcategory === sub.name ? 'active' : ''
                           }`}
-                        onClick={() => handleSubCategoryClick(sub)}
-                      >
-                        {sub.name}
-                      </button>
+                          onClick={() => handleSubCategoryClick(sub)}
+                        >
+                          <span>{sub.name}</span>
+                          {sub.types && sub.types.length > 0 && (
+                            <span
+                              className="subcategory-toggle"
+                              onClick={e => {
+                                e.stopPropagation();
+                                setopenedSubCategories(prev => ({
+                                  ...prev,
+                                  [sub.name]: !prev[sub.name],
+                                }));
+                              }}
+                            >
+                              {openedSubCategories[sub.name] ? (
+                                <FaChevronUp style={{ fontSize: '12px' }} />
+                              ) : (
+                                <FaChevronDown style={{ fontSize: '12px' }} />
+                              )}
+                            </span>
+                          )}
+                        </button>
+
+                        {/* Tipos de la subcategoría */}
+                        {Array.isArray(sub.types) && sub.types.length > 0 && (
+                          <div
+                            className={`types ${
+                              openedSubCategories[sub.name] ? 'open' : ''
+                            }`}
+                          >
+                            {sub.types.map((type, typeIndex) => (
+                              <button
+                                key={typeIndex}
+                                className={`type-button ${
+                                  filters.type === type ? 'active' : ''
+                                }`}
+                                onClick={() => handleTypeClick(type)}
+                              >
+                                {type}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
-
                 )}
-                {Array.isArray(category.subcategories) && category.subcategories.map((subcat, index) => (
-                  Array.isArray(subcat.types) && subcat.types.length > 0 && (
-                    <div
-                      key={index}
-                      className={`types ${openedSubCategories?.[subcat.name] ? 'open' : ''}`}
-                    >
-                      {subcat.types.map((type, typeIndex) => (
-                        <button
-                          key={typeIndex}
-                          className={`subcategory-button ${filters.type === type ? 'active' : ''}`}
-                          onClick={() => handleTypeClick(type)}
-                        >
-                          {type}
-                        </button>
-                      ))}
-                    </div>
-                  )
-                ))}
               </div>
             ))}
           </div>
@@ -310,11 +348,9 @@ const Catalog = () => {
       </div>
 
       {/* Overlay para móvil */}
-      {
-        isFilterOpen && (
-          <div className="filter-overlay" onClick={closeFilter}></div>
-        )
-      }
+      {isFilterOpen && (
+        <div className="filter-overlay" onClick={closeFilter}></div>
+      )}
 
       {/* Modal de producto */}
       <ProductModal
@@ -322,7 +358,7 @@ const Catalog = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
-    </div >
+    </div>
   );
 };
 

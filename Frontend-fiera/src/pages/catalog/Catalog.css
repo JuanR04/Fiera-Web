@@ -226,24 +226,42 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
   padding-left: 1rem;
+  margin-left: 0.25rem;
+  border-left: 1px solid #eee; /* Línea vertical sutil */
 }
 
 .subcategories.open {
-  max-height: 200px;
-  padding-top: 0.5rem;
+  max-height: 500px; /* Aumentar para acomodar más elementos */
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.subcategory-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.subcategory-toggle {
+  margin-left: auto;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
 }
 
 .subcategory-button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  background: none;
+  background: transparent;
   border: none;
-  text-align: left;
-  padding: 0.5rem 0;
-  cursor: pointer;
+  padding: 8px 5px;
   font-size: 0.9rem;
-  color: #666;
-  transition: all 0.3s ease;
+  color: #555;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .subcategory-button:hover {
@@ -252,7 +270,50 @@
 
 .subcategory-button.active {
   color: #000;
-  font-weight: bold;
+  font-weight: 500;
+  background: transparent;
+}
+
+/* Ajustes a los tipos */
+.types {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 1px dotted #eee; /* Línea punteada para indicar jerarquía */
+}
+
+.types.open {
+  max-height: 500px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Mejorar el aspecto del botón de tipo */
+.type-button {
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  margin: 1px 0;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  color: #777;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.type-button:hover {
+  color: #000;
+  background-color: rgba(245, 245, 245, 0.5);
+}
+
+.type-button.active {
+  font-weight: 500;
+  color: #000;
+  background-color: rgba(238, 238, 238, 0.5);
 }
 
 /* === ÁREA PRINCIPAL === */
