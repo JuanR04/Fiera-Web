@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    allowedHosts: [process.env.VITE_HOST_TUNNEL]
+    allowedHosts: ['fiera-web-frontend.onrender.com']
 
   }
 })
