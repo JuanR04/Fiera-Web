@@ -100,7 +100,7 @@ const ProtectedAdmin = () => {
             <h2>Área de Administración</h2>
 
             <form onSubmit={handleSubmit} className="admin-auth-form">
-                <div className="form-group">
+                <div className="form-group_l">
                     <label htmlFor="password">Contraseña de Administrador</label>
                     <input
                         type="password"

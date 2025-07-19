@@ -1,53 +1,69 @@
 .admin-auth-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 400px;
-  margin: 40px;
+  width: 300px;
+  margin: 100px auto;
   padding: 2rem;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-
+.form-group_l{
+  display: flex;
+  flex-direction: column;
+}
 .admin-auth-logo {
   max-width: 150px;
   margin-bottom: 1.5rem;
 }
-.form-group{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-}
-.submit-button{
-  margin:auto;
-  
-  
-}
-.admin-auth-form{
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  align-items: center;
-  gap: 40px;
-}
+
 .admin-auth-form {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-.form-group {
-  width: 100%;
+.admin-auth-form .form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
-input[type="password"] {
-  padding: 10px;
-  width: 100%;
-  max-width: 300px;
+.admin-auth-form label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.admin-auth-form input {
+  padding: 0.75rem;
+  border: 2px solid #ddd;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.admin-auth-form input:focus {
+  border-color: #000;
+  outline: none;
+}
+
+.admin-auth-form .error-message {
+  color: #e53935;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.admin-auth-form .submit-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-auth-form .submit-button:hover {
+  background-color: #333;
 }
