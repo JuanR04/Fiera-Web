@@ -42,6 +42,7 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
     const categories = [
         { name: 'Guayos', subcategories: ['Amateur', 'Profesional'] },
+        { name: 'Zapatillas', subcategories: ['Grama Sintética', 'Futbol Sala']},
         { name: 'Balones', subcategories: ['Futbol'] },
         { name: 'Licras', subcategories: ['Deportivas'] },
     ];
@@ -50,17 +51,22 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
         if (category === 'Guayos') {
             if (subcategory === 'Amateur') {
                 return [
-                    'Zapatilla Futbol Sala FS',
-                    'Botin Zapatilla Futbol Sala',
-                    'Zapatilla Gama Sintetica',
-                    'Botin Zapatilla Gama Sintetica',
                     'Botin Guayo',
                     'Guayo',
                 ];
             } else if (subcategory === 'Profesional') {
                 return ['Botin Guayo', 'Guayo'];
             }
-        } else if (category === 'Balones') {
+        }
+        else if (category === 'Zapatillas'){
+            if(subcategory === 'Grama Sintética'){
+                return ['Botín','Normal'];
+            }
+            else if(subcategory === 'Futbol Sala'){
+                return ['Botín','Normal'];
+            }
+        }
+        else if (category === 'Balones') {
             return ['Micro', 'Futbol', 'Fut-sala', 'Fut-salon'];
         } else if (category === 'Licras') {
             return ['Buzo', 'Licra corta', 'Licra larga'];
@@ -69,7 +75,8 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
     };
 
     const getSizeOptions = category => {
-        if (category === 'Guayos') return Array.from({ length: 14 }, (_, i) => (i + 32).toString());
+        if (category === 'Guayos') return Array.from({ length: 12 }, (_, i) => (i + 32).toString());
+        if (category === 'Zapatillas') return Array.from({length:17}, (_,i)=> (i+27).toString());
         if (category === 'Balones') return ['#3.5', '#4', '#5'];
         if (category === 'Licras') return ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         return [];
