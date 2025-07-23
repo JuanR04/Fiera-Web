@@ -84,6 +84,7 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
     const materialOptionsByCategory = {
         Guayos: ['cuero', 'sintético'],
+        Zapatillas: ['cuero','sintético'],
         Balones: ['sintético'],
         Licras: ['tela licra'],
     };
@@ -444,7 +445,7 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                         </div>
 
                         {/* Material (solo para guayos) */}
-                        {['Guayos', 'Balones', 'Licras'].includes(formData.category) && (
+                        {['Guayos', 'Balones','Zapatillas', 'Licras'].includes(formData.category) && (
                             <div className="form-group">
                                 <label htmlFor="material">Material*</label>
                                 <select
