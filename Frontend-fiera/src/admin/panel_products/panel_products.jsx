@@ -6,8 +6,9 @@ import "./panel_products.css";
 const PanelProducts = ({onLogout}) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [productoEditar, setProductoEditar] = useState(null); // para editar
+    const [productoEditar, setProductoEditar] = useState(null);
     const [modo, setModo] = useState("crear");
+    const [message, setMessage] = useState(""); // <-- nuevo estado para mensajes
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -27,6 +28,10 @@ const PanelProducts = ({onLogout}) => {
     }, []);
 
     const handleRemoveProduct = async (id_producto) => {
+        // Mensaje de confirmación
+        const confirmDelete = window.confirm("¿Seguro que deseas eliminar este producto?");
+        if (!confirmDelete) return;
+
         try {
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL}/api/deleteProduct/${id_producto}`,
@@ -36,6 +41,8 @@ const PanelProducts = ({onLogout}) => {
             );
             if (response.ok) {
                 setProducts((prev) => prev.filter((p) => p.id_producto !== id_producto));
+                setMessage("Producto eliminado correctamente."); // Mensaje de éxito
+                setTimeout(() => setMessage(""), 3000);
             } else {
                 console.log("Error al eliminar el producto");
             }
@@ -58,21 +65,10 @@ const PanelProducts = ({onLogout}) => {
 
             const method = "POST";
 
-            console.log("🔄 Enviando formulario...");
-            console.log("🧾 Modo:", modo);
-            console.log("📬 Endpoint:", endpoint);
-            console.log("📦 Método:", method);
-
-            for (let pair of formData.entries()) {
-                console.log(`📝 ${pair[0]}:`, pair[1]);
-            }
-
             const response = await fetch(endpoint, {
                 method,
                 body: formData,
             });
-
-            console.log("📥 Respuesta del servidor:", response);
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -80,7 +76,9 @@ const PanelProducts = ({onLogout}) => {
                 throw new Error("Error al guardar el producto");
             }
 
-            console.log("✅ Producto guardado correctamente.");
+            setMessage("Producto añadido con éxito."); // Mensaje de éxito
+            setTimeout(() => setMessage(""), 3000);
+
             await fetchProducts();
             setProductoEditar(null);
             setModo("crear");
@@ -94,6 +92,14 @@ const PanelProducts = ({onLogout}) => {
             <button onClick={onLogout} className="logout-button" type="button">
                 <FaSignOutAlt /> Cerrar sesión
             </button>
+
+            {/* Mensaje global */}
+            {message && (
+                <div className="panel-message" style={{marginBottom: "1rem", color: "#198754", fontWeight: "bold"}}>
+                    {message}
+                </div>
+            )}
+
             <FormAdmin
                 productoEditar={productoEditar}
                 onSubmit={handleSubmit}

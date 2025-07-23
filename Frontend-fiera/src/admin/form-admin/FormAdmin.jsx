@@ -44,11 +44,13 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
         { name: 'Guayos', subcategories: ['Amateur', 'Profesional'] },
         { name: 'Balones', subcategories: ['Futbol'] },
         { name: 'Licras', subcategories: ['Deportivas'] },
+        { name: 'Linea Escolar', subcategories:['Escolar']}
     ];
 
     const getTypeOptions = (category, subcategory) => {
         if (category === 'Guayos') {
             if (subcategory === 'Amateur') {
+<<<<<<< Updated upstream
                 return [
                     'Zapatilla Futbol Sala FS',
                     'Botin Zapatilla Futbol Sala',
@@ -57,19 +59,43 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                     'Botin Guayo',
                     'Guayo',
                 ];
+=======
+                return ['Botin Guayo','Guayo'];
+>>>>>>> Stashed changes
             } else if (subcategory === 'Profesional') {
                 return ['Botin Guayo', 'Guayo'];
             }
         } else if (category === 'Balones') {
             return ['micro', 'futbol', 'futsala', 'futsalon'];
         } else if (category === 'Licras') {
+<<<<<<< Updated upstream
             return ['buzo', 'licra corta', 'licra larga'];
+=======
+            return ['Buzo', 'Licra corta', 'Licra larga'];
+        }else if(category==='Linea Escolar'){
+            return ['Suela tache','Suela lisa']
+>>>>>>> Stashed changes
         }
         return [];
     };
 
+<<<<<<< Updated upstream
     const getSizeOptions = category => {
         if (category === 'Guayos') return Array.from({ length: 14 }, (_, i) => (i + 32).toString());
+=======
+    const getSizeOptions = (category, subcategory, type) => {
+        if (category === 'Guayos') return Array.from({ length: 12 }, (_, i) => (i + 32).toString());
+        if (category === 'Zapatillas') return Array.from({length:17}, (_,i)=> (i+27).toString());
+        if (category === 'Linea Escolar'){ 
+            if (subcategory==='Escolar'){
+                if (type === 'Suela tache'){
+                    return Array.from({length:17}, (_,i)=> (i+27).toString());
+                }else if (type==='Suela lisa'){
+                    return Array.from({length:9}, (_,i)=> (i+35).toString());
+                }
+            }
+        }
+>>>>>>> Stashed changes
         if (category === 'Balones') return ['#3.5', '#4', '#5'];
         if (category === 'Licras') return ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         return [];
@@ -77,6 +103,11 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
     const materialOptionsByCategory = {
         Guayos: ['cuero', 'sintético'],
+<<<<<<< Updated upstream
+=======
+        Zapatillas: ['cuero','sintético'],
+        'Linea Escolar':['cuero'],
+>>>>>>> Stashed changes
         Balones: ['sintético'],
         Licras: ['tela licra'],
     };
@@ -90,7 +121,7 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                 setFormData(prev => ({ ...prev, subcategory: '' }));
             }
 
-            setAvailableSizes(getSizeOptions(formData.category));
+            setAvailableSizes(getSizeOptions(formData.category,formData.subcategory,formData.type));
 
             const types = getTypeOptions(formData.category, formData.subcategory);
             setAvailableTypes(types);
@@ -99,7 +130,7 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                 setFormData(prev => ({ ...prev, type: '' }));
             }
         }
-    }, [formData.category]);
+    }, [formData.category,formData.subcategory,formData.type]);
 
     useEffect(() => {
         if (formData.category && formData.subcategory) {
@@ -437,7 +468,11 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                         </div>
 
                         {/* Material (solo para guayos) */}
+<<<<<<< Updated upstream
                         {['Guayos', 'Balones', 'Licras'].includes(formData.category) && (
+=======
+                        {['Guayos', 'Balones','Zapatillas', 'Licras', 'Linea Escolar'].includes(formData.category) && (
+>>>>>>> Stashed changes
                             <div className="form-group">
                                 <label htmlFor="material">Material*</label>
                                 <select

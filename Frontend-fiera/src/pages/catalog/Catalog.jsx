@@ -53,12 +53,20 @@ const Catalog = () => {
 
   const filterCategories = [
     {
+<<<<<<< Updated upstream
       name: 'Balones',
       subcategories: ['Micro', 'Fut-sala', 'Profesionales', 'Training'],
     },
     {
+=======
+>>>>>>> Stashed changes
       name: 'Guayos',
       subcategories: ['Profesionales', 'Amateur', 'Niños'],
+    },
+    {
+      name:'Linea Escolar',
+      subcategories:[
+      ]
     },
     {
       name: 'Licras',
@@ -71,6 +79,15 @@ const Catalog = () => {
     {
       name: 'Ofertas',
       subcategories: [],
+    },
+    {
+      name: 'Balones',
+      subcategories: [
+        {
+          name: 'Futbol',
+          types: ['Micro', 'Fut-sala', 'Futbol', 'Fut-salón'],
+        },
+      ],
     },
   ];
 
