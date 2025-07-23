@@ -54,6 +54,7 @@ const Catalog = () => {
     } else {
       applyFilter('category', categoryName);
     }
+    if (window.innerWidth <= 768) closeFilter(); 
   };
 
   const handleSubCategoryClick = subcategory => {
@@ -68,6 +69,7 @@ const Catalog = () => {
         [subcategory.name]: !prev[subcategory.name],
       }));
     }
+    if (window.innerWidth <= 768) closeFilter(); 
   };
 
   // Añade esta función que falta
@@ -77,6 +79,7 @@ const Catalog = () => {
     } else {
       applyFilter('type', type);
     }
+    if (window.innerWidth <= 768) closeFilter(); 
   };
 
   const filterCategories = [
@@ -99,15 +102,24 @@ const Catalog = () => {
         {
           name: 'Amateur',
           types: [
-            'Zapatilla Futbol Sala FS',
-            'Botin Zapatilla Futbol Sala',
-            'Zapatilla Gama Sintetica',
-            'Botin Zapatilla Gama Sintetica',
             'Botin Guayo',
             'Guayo',
           ],
         },
       ],
+    },
+    {
+      name:'Zapatillas',
+      subcategories:[
+        {
+          name:'Grama Sintética',
+          types:['Botín','Normal']
+        },
+        {
+          name:'Futbol Sala',
+          types:['Botín','Normal']
+        }
+      ]
     },
     {
       name: 'Licras',
