@@ -19,7 +19,6 @@ export const CatalogProvider = ({ children }) => {
     category: '',
     subcategory: '',
     type: '',
-    ageGroup: '',
   });
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
@@ -89,7 +88,7 @@ export const CatalogProvider = ({ children }) => {
     setCurrentPage(1);
     setLoading(false);
 
-    setFilters({ category: '', subcategory: '', ageGroup: '' });
+    setFilters({ category: '', subcategory: '', type: '' });
     setSearchParams({ q: query });
   };
 
@@ -160,9 +159,6 @@ export const CatalogProvider = ({ children }) => {
       if (currentFilters.type) {
         results = results.filter(p => p.type === currentFilters.type);
       }
-      if (currentFilters.ageGroup) {
-        results = results.filter(p => p.ageGroup === currentFilters.ageGroup);
-      }
 
       setFilteredProducts(results);
       setCurrentPage(1);
@@ -181,9 +177,9 @@ export const CatalogProvider = ({ children }) => {
     const category = searchParams.get('category') || '';
     const subcategory = searchParams.get('subcategory') || '';
     const type = searchParams.get('type') || '';
-    const ageGroup = searchParams.get('ageGroup') || '';
+    
 
-    const urlFilters = { category, subcategory, type, ageGroup };
+    const urlFilters = { category, subcategory, type};
 
     setCurrentPage(page);
 
@@ -210,7 +206,7 @@ export const CatalogProvider = ({ children }) => {
   };
 
   const clearFilters = () => {
-    const clearedFilters = { category: '', subcategory: '', ageGroup: '' };
+    const clearedFilters = { category: '', subcategory: '', type: '' };
     setFilters(clearedFilters);
     setSearchParams({});
     fetchProducts(clearedFilters);

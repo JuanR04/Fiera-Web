@@ -157,16 +157,6 @@ const Catalog = () => {
           <FaFilter /> Filtros
         </button>
 
-        {/* Combobox de edad */}
-        <select
-          className="age-filter-mobile"
-          value={filters.ageGroup}
-          onChange={e => applyFilter('ageGroup', e.target.value)}
-        >
-          <option value="">Todos</option>
-          <option value="adulto">Adulto</option>
-          <option value="niño">Niño</option>
-        </select>
       </div>
 
       <div className="catalog-layout">
@@ -177,20 +167,6 @@ const Catalog = () => {
             <button className="close-filter-btn" onClick={closeFilter}>
               <FaTimes />
             </button>
-          </div>
-
-          {/* Filtro de edad en sidebar */}
-          <div className="age-filter-desktop">
-            <h3>Edad</h3>
-            <select
-              className="age-select"
-              value={filters.ageGroup}
-              onChange={e => applyFilter('ageGroup', e.target.value)}
-            >
-              <option value="">Todos</option>
-              <option value="adulto">Adulto</option>
-              <option value="niño">Niño</option>
-            </select>
           </div>
 
           {/* Filtros de categorías */}
@@ -298,7 +274,7 @@ const Catalog = () => {
         {/* Área principal de productos */}
         <main className="catalog-main">
           {/* Indicadores de filtros activos */}
-          {(filters.category || filters.subcategory || filters.ageGroup) && (
+          {(filters.category || filters.subcategory) && (
             <div className="active-filters">
               <h3>Filtros activos:</h3>
               <div className="filter-tags">
@@ -314,14 +290,6 @@ const Catalog = () => {
                   <span className="filter-tag">
                     {filters.subcategory}
                     <button onClick={() => applyFilter('subcategory', '')}>
-                      ×
-                    </button>
-                  </span>
-                )}
-                {filters.ageGroup && (
-                  <span className="filter-tag">
-                    {filters.ageGroup === 'adulto' ? 'Adulto' : 'Niño'}
-                    <button onClick={() => applyFilter('ageGroup', '')}>
                       ×
                     </button>
                   </span>
