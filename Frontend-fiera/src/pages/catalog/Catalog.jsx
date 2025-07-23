@@ -84,6 +84,7 @@ const Catalog = () => {
 
   const filterCategories = [
     {
+<<<<<<< Updated upstream
       name: 'Balones',
       subcategories: [
         {
@@ -93,6 +94,8 @@ const Catalog = () => {
       ],
     },
     {
+=======
+>>>>>>> Stashed changes
       name: 'Guayos',
       subcategories: [
         {
@@ -122,11 +125,25 @@ const Catalog = () => {
       ]
     },
     {
+      name:'Linea Escolar',
+      subcategories:[
+      ]
+    },
+    {
       name: 'Licras',
       subcategories: [
         {
           name: 'Deportivas',
           types: ['Buzo', 'Licra corta', 'Licra larga'],
+        },
+      ],
+    },
+    {
+      name: 'Balones',
+      subcategories: [
+        {
+          name: 'Futbol',
+          types: ['Micro', 'Fut-sala', 'Futbol', 'Fut-salón'],
         },
       ],
     },
