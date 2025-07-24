@@ -2,17 +2,15 @@
 import { useState, useRef, useEffect } from 'react';
 import './FormAdmin.css';
 import DashboardAdmin from '../dashboard_admin';
-import {
-    FaUpload,
-    FaTrash,
-    FaSave,
-    FaPlus,
-    FaTimes,
-} from 'react-icons/fa';
+import { FaUpload, FaTrash, FaSave, FaPlus, FaTimes } from 'react-icons/fa';
 
-
-const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) => {
-
+const FormAdmin = ({
+    productoEditar = null,
+    onSubmit,
+    modo = 'crear',
+    setModo,
+    extraButtons,
+}) => {
     const [formData, setFormData] = useState({
         id_producto: '',
         id_detalle: '',
@@ -28,10 +26,11 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
         colors: ['#000000'],
 
         ...productoEditar,
-
     });
 
-    const [imagePreview, setImagePreview] = useState(productoEditar?.url_image || null);
+    const [imagePreview, setImagePreview] = useState(
+        productoEditar?.url_image || null
+    );
     const [imageFile, setImageFile] = useState(null);
     const [message, setMessage] = useState({ text: '', type: '' });
     const [availableSubcategories, setAvailableSubcategories] = useState([]);
@@ -42,49 +41,46 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
     const categories = [
         { name: 'Guayos', subcategories: ['Amateur', 'Profesional'] },
-        { name: 'Zapatillas', subcategories: ['Grama Sintética', 'Futbol Sala']},
+        { name: 'Zapatillas', subcategories: ['Grama Sintética', 'Futbol Sala'] },
         { name: 'Balones', subcategories: ['Futbol'] },
         { name: 'Licras', subcategories: ['Deportivas'] },
-        { name: 'Linea Escolar', subcategories:['Escolar']}
+        { name: 'Linea Escolar', subcategories: ['Escolar'] },
     ];
 
     const getTypeOptions = (category, subcategory) => {
         if (category === 'Guayos') {
             if (subcategory === 'Amateur') {
-                return ['Botin Guayo','Guayo'];
+                return ['Botin Guayo', 'Guayo'];
             } else if (subcategory === 'Profesional') {
                 return ['Botin Guayo', 'Guayo'];
             }
-        }
-        else if (category === 'Zapatillas'){
-            if(subcategory === 'Grama Sintética'){
-                return ['Botín','Normal'];
+        } else if (category === 'Zapatillas') {
+            if (subcategory === 'Grama Sintética') {
+                return ['Botín', 'Normal'];
+            } else if (subcategory === 'Futbol Sala') {
+                return ['Botín', 'Normal'];
             }
-            else if(subcategory === 'Futbol Sala'){
-                return ['Botín','Normal'];
-            }
-        }
-        else if (category === 'Balones') {
+        } else if (category === 'Balones') {
             return ['Micro', 'Futbol', 'Fut-sala', 'Fut-salon'];
         } else if (category === 'Licras') {
-
             return ['Buzo', 'Licra corta', 'Licra larga'];
-        }else if(category==='Linea Escolar'){
-            return ['Suela tache','Suela lisa']
+        } else if (category === 'Linea Escolar') {
+            return ['Suela tache', 'Suela lisa'];
         }
         return [];
     };
 
-
     const getSizeOptions = (category, subcategory, type) => {
-        if (category === 'Guayos') return Array.from({ length: 12 }, (_, i) => (i + 32).toString());
-        if (category === 'Zapatillas') return Array.from({length:17}, (_,i)=> (i+27).toString());
-        if (category === 'Linea Escolar'){ 
-            if (subcategory==='Escolar'){
-                if (type === 'Suela tache'){
-                    return Array.from({length:17}, (_,i)=> (i+27).toString());
-                }else if (type==='Suela lisa'){
-                    return Array.from({length:9}, (_,i)=> (i+35).toString());
+        if (category === 'Guayos')
+            return Array.from({ length: 12 }, (_, i) => (i + 32).toString());
+        if (category === 'Zapatillas')
+            return Array.from({ length: 17 }, (_, i) => (i + 27).toString());
+        if (category === 'Linea Escolar') {
+            if (subcategory === 'Escolar') {
+                if (type === 'Suela tache') {
+                    return Array.from({ length: 17 }, (_, i) => (i + 27).toString());
+                } else if (type === 'Suela lisa') {
+                    return Array.from({ length: 9 }, (_, i) => (i + 35).toString());
                 }
             }
         }
@@ -96,8 +92,8 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
     const materialOptionsByCategory = {
         Guayos: ['cuero', 'sintético'],
-        Zapatillas: ['cuero','sintético'],
-        'Linea Escolar':['cuero'],
+        Zapatillas: ['cuero', 'sintético'],
+        'Linea Escolar': ['cuero'],
         Balones: ['sintético'],
         Licras: ['tela licra'],
     };
@@ -111,7 +107,9 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                 setFormData(prev => ({ ...prev, subcategory: '' }));
             }
 
-            setAvailableSizes(getSizeOptions(formData.category,formData.subcategory,formData.type));
+            setAvailableSizes(
+                getSizeOptions(formData.category, formData.subcategory, formData.type)
+            );
 
             const types = getTypeOptions(formData.category, formData.subcategory);
             setAvailableTypes(types);
@@ -120,7 +118,7 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                 setFormData(prev => ({ ...prev, type: '' }));
             }
         }
-    }, [formData.category,formData.subcategory,formData.type]);
+    }, [formData.category, formData.subcategory, formData.type]);
 
     useEffect(() => {
         if (formData.category && formData.subcategory) {
@@ -135,13 +133,19 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
     useEffect(() => {
         if (productoEditar) {
-            const colorArray = typeof productoEditar.color === 'string'
-                ? productoEditar.color.split(',').map(c => c.trim())
-                : ['#000000'];
+            const colorArray =
+                typeof productoEditar.color === 'string'
+                    ? productoEditar.color.split(',').map(c => c.trim())
+                    : ['#000000'];
 
-            const subcats = categories.find(cat => cat.name === productoEditar.category)?.subcategories || [];
+            const subcats =
+                categories.find(cat => cat.name === productoEditar.category)
+                    ?.subcategories || [];
             const sizes = getSizeOptions(productoEditar.category);
-            const types = getTypeOptions(productoEditar.category, productoEditar.subcategory);
+            const types = getTypeOptions(
+                productoEditar.category,
+                productoEditar.subcategory
+            );
 
             setAvailableSubcategories(subcats);
             setAvailableSizes(sizes);
@@ -176,7 +180,8 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
         }
     };
 
-    const addColor = () => setFormData(prev => ({ ...prev, colors: [...prev.colors, '#FFFFFF'] }));
+    const addColor = () =>
+        setFormData(prev => ({ ...prev, colors: [...prev.colors, '#FFFFFF'] }));
 
     const changeColor = (index, value) => {
         const updatedColors = [...formData.colors];
@@ -203,15 +208,18 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
             'size_max',
         ];
         requiredFields.forEach(field => {
-            if (!formData[field]) newErrors[field] = `El campo ${field} es obligatorio`;
+            if (!formData[field])
+                newErrors[field] = `El campo ${field} es obligatorio`;
         });
-        if (formData.category === 'Guayos' && !formData.material) newErrors.material = 'Material requerido';
-        if (!formData.url_image && !imagePreview) newErrors.url_image = 'Imagen requerida';
-        if (!formData.colors.length) newErrors.colors = 'Debe seleccionar al menos un color';
+        if (formData.category === 'Guayos' && !formData.material)
+            newErrors.material = 'Material requerido';
+        if (!formData.url_image && !imagePreview)
+            newErrors.url_image = 'Imagen requerida';
+        if (!formData.colors.length)
+            newErrors.colors = 'Debe seleccionar al menos un color';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
 
     // Obtener etiqueta para mensajes de error
     const getFieldLabel = field => {
@@ -262,7 +270,9 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
             Object.entries(formData).forEach(([key, value]) => {
                 if (key === 'colors') {
                     data.append(key, value.join(','));
-                } else if (['size_min', 'size_max', 'id_producto', 'id_detalle'].includes(key)) {
+                } else if (
+                    ['size_min', 'size_max', 'id_producto', 'id_detalle'].includes(key)
+                ) {
                     const simpleValue = Array.isArray(value) ? value[0] : value;
                     data.append(key, simpleValue.toString());
                 } else if (key !== 'url_image') {
@@ -294,7 +304,6 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                     className="form-admin-logo"
                 />
                 <h2>Registro de Productos</h2>
-                
             </div>
 
             {message.text && (
@@ -459,28 +468,34 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
 
                         {/* Material (solo para guayos) */}
 
-                        {['Guayos', 'Balones','Zapatillas', 'Licras', 'Linea Escolar'].includes(formData.category) && (
-                            <div className="form-group">
-                                <label htmlFor="material">Material*</label>
-                                <select
-                                    id="material"
-                                    name="material"
-                                    value={formData.material}
-                                    onChange={handleChange}
-                                    className={errors.material ? 'error' : ''}
-                                >
-                                    <option value="">Seleccionar material</option>
-                                    {materialOptions.map(material => (
-                                        <option key={material} value={material}>
-                                            {material}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.material && (
-                                    <span className="error-message">{errors.material}</span>
-                                )}
-                            </div>
-                        )}
+                        {[
+                            'Guayos',
+                            'Balones',
+                            'Zapatillas',
+                            'Licras',
+                            'Linea Escolar',
+                        ].includes(formData.category) && (
+                                <div className="form-group">
+                                    <label htmlFor="material">Material*</label>
+                                    <select
+                                        id="material"
+                                        name="material"
+                                        value={formData.material}
+                                        onChange={handleChange}
+                                        className={errors.material ? 'error' : ''}
+                                    >
+                                        <option value="">Seleccionar material</option>
+                                        {materialOptions.map(material => (
+                                            <option key={material} value={material}>
+                                                {material}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.material && (
+                                        <span className="error-message">{errors.material}</span>
+                                    )}
+                                </div>
+                            )}
 
                         {/* Talla */}
                         <div className="size_group">
@@ -577,11 +592,13 @@ const FormAdmin = ({productoEditar = null, onSubmit, modo = 'crear', setModo }) 
                 </div>
 
                 <div className="form-actions">
+                    {extraButtons}
                     <button type="button" className="reset-button" onClick={handleReset}>
                         <FaTrash /> Limpiar
                     </button>
                     <button type="submit" className="submit-button">
-                        <FaSave /> {modo === 'editar' ? 'Actualizar producto' : 'Guardar producto'}
+                        <FaSave />{' '}
+                        {modo === 'editar' ? 'Actualizar producto' : 'Guardar producto'}
                     </button>
                 </div>
             </form>
