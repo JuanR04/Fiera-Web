@@ -84,18 +84,6 @@ const Catalog = () => {
 
   const filterCategories = [
     {
-<<<<<<< Updated upstream
-      name: 'Balones',
-      subcategories: [
-        {
-          name: 'Futbol',
-          types: ['Micro', 'Fut-sala', 'Futbol', 'Fut-salón'],
-        },
-      ],
-    },
-    {
-=======
->>>>>>> Stashed changes
       name: 'Guayos',
       subcategories: [
         {
